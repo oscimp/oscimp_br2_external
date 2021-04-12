@@ -1,5 +1,8 @@
 config BR2_PACKAGE_GR_RPITX
 	bool "gr-rpitx"
-	select BR2_PACKAGE_LIBRPITX
+	select BR2_PACKAGE_LIBRPITX 
+	depends on BR2_PACKAGE_GNURADIO
 	help
 	  GNU Radio RPiTX sink
+          
+	  https://github.com/jmfriedt/gr-rpitx
