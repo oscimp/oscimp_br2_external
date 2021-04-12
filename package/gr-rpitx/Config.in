@@ -1,0 +1,5 @@
+config BR2_PACKAGE_GR_RPITX
+	bool "gr-rpitx"
+	select BR2_PACKAGE_LIBRPITX
+	help
+	  GNU Radio RPiTX sink
