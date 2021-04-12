@@ -4,7 +4,7 @@ config BR2_PACKAGE_VXI11
 	select BR2_PACKAGE_LIBTIRPC
 	help
 	  RPC protocol for communicating with VXI11-enabled devices over
-	  ehternet from Linux (including instruments such as oscillos
+	  Ethernet from Linux (including instruments such as oscilloscopes)
 
 	  http://optics.eee.nottingham.ac.uk/vxi11/
 
