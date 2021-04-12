@@ -9,7 +9,7 @@ How-to use it
 
 Download the tested buildroot tarball:
 ```bash
-wget https://buildroot.org/downloads/buildroot-2020.11.1.tar.gz
+wget https://buildroot.org/downloads/buildroot-2021.02.1.tar.gz
 ```
 
 ### Configure, build and install
