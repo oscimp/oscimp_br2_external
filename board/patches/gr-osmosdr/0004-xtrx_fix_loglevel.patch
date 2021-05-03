@@ -1,0 +1,13 @@
+Index: gr-osmosdr-0.2.3/lib/xtrx/xtrx_obj.cc
+===================================================================
+--- gr-osmosdr-0.2.3.orig/lib/xtrx/xtrx_obj.cc
++++ gr-osmosdr-0.2.3/lib/xtrx/xtrx_obj.cc
+@@ -77,6 +77,8 @@ xtrx_obj::xtrx_obj(const std::string &pa
+   }
+ 
+   _devices = res;
++
++  xtrx_log_setlevel(loglevel, "");
+ }
+ 
+ double xtrx_obj::set_smaplerate(double rate, double master, bool sink, unsigned flags)
