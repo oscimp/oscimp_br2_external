@@ -1,0 +1,7 @@
+config BR2_PACKAGE_GR_DRM
+	bool "gr-drm"
+	depends on BR2_PACKAGE_FAAC
+	help
+	  GNU Radio DRM source
+          
+	  https://github.com/kit-cel/gr-drm
