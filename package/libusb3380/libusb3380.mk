@@ -12,7 +12,7 @@ LIBUSB3380_LICENSE_FILES = LICENSE
 # libusb3380 prevents doing an in-source-tree build
 LIBUSB3380_SUPPORTS_IN_SOURCE_BUILD = NO
 
-LIBUSB3380_DEPENDENCIES = host-python3 host-python3-cheetah
+LIBUSB3380_DEPENDENCIES = host-python3 host-python3-cheetah libusb
 
 # For third-party blocks, the libusb3380 libraries are mandatory at
 # compile time.
