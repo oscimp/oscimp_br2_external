@@ -1,0 +1,69 @@
+From bc629b03fe133c81fc3ded4a9d040445cc265fe7 Mon Sep 17 00:00:00 2001
+From: Clayton Smith <argilo@gmail.com>
+Date: Thu, 31 Dec 2020 21:34:51 -0500
+Subject: [PATCH 1/3] hackrf: fix bandwidth setting
+
+The T/R switching code added in ae2253c516bfdc9ae4575ecd61fe0e6cd8608a0d
+fails to set custom filter bandwidths because it sets bandwidth and
+sample rate in the wrong order. As noted in the documentation for
+hackrf_set_sample_rate: "If you want to override the baseband filter
+selection, you must do so after setting the sample rate."
+
+To solve this problem I moved the set_bandwidth call after
+set_sample_rate. It was also necessary to skip the call if a custom
+bandwidth was not requested.
+
+Signed-off-by: Eric Wild <ewild@sysmocom.de>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ lib/hackrf/hackrf_common.cc | 5 ++++-
+ lib/hackrf/hackrf_common.h  | 1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/lib/hackrf/hackrf_common.cc b/lib/hackrf/hackrf_common.cc
+index a6de22a..666dc60 100644
+--- a/lib/hackrf/hackrf_common.cc
++++ b/lib/hackrf/hackrf_common.cc
+@@ -37,6 +37,7 @@ hackrf_common::hackrf_common(const std::string &args) :
+   _center_freq(0),
+   _freq_corr(0),
+   _auto_gain(false),
++  _requested_bandwidth(0),
+   _bandwidth(0),
+   _bias(false),
+   _started(false)
+@@ -339,6 +340,7 @@ double hackrf_common::set_bandwidth( double bandwidth, size_t chan )
+   int ret;
+ //  osmosdr::freq_range_t bandwidths = get_bandwidth_range( chan );
+ 
++  _requested_bandwidth = bandwidth;
+   if ( bandwidth == 0.0 ) /* bandwidth of 0 means automatic filter selection */
+     bandwidth = _sample_rate * 0.75; /* select narrower filters to prevent aliasing */
+ 
+@@ -411,9 +413,10 @@ bool hackrf_common::get_bias()
+ void hackrf_common::start()
+ {
+   _started = true;
+-  set_bandwidth(get_bandwidth());
+   set_center_freq(get_center_freq());
+   set_sample_rate(get_sample_rate());
++  if (_requested_bandwidth != 0)
++    set_bandwidth(get_bandwidth());
+   set_gain(get_gain());
+   set_bias(get_bias());
+ }
+diff --git a/lib/hackrf/hackrf_common.h b/lib/hackrf/hackrf_common.h
+index bb553c3..d1ab47b 100644
+--- a/lib/hackrf/hackrf_common.h
++++ b/lib/hackrf/hackrf_common.h
+@@ -104,6 +104,7 @@ private:
+   double _freq_corr;
+   bool _auto_gain;
+   double _amp_gain;
++  double _requested_bandwidth;
+   double _bandwidth;
+   bool _bias;
+   bool _started;
+-- 
+2.26.2
+

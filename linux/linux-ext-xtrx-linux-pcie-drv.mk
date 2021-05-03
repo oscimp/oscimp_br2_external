@@ -22,5 +22,8 @@ define XTRX_LINUX_PCIE_DRV_PREPARE_KERNEL
 	echo -e "\tdefault m" >> $(LINUX_DIR)/$${xtrx_dir}/Kconfig ; \
 	echo -e "\thelp" >> $(LINUX_DIR)/$${xtrx_dir}/Kconfig ; \
 	echo -e "\t  Say Y to enable XTRX PCI driver" >> $(LINUX_DIR)/$${xtrx_dir}/Kconfig ; \
-	echo 'obj-$$(CONFIG_XTRX_LINUX_PCIE_DRV) += xtrx.o' >> $(LINUX_DIR)/$${xtrx_dir}/Makefile
+	echo 'obj-$$(CONFIG_XTRX_LINUX_PCIE_DRV) += xtrx.o' >> $(LINUX_DIR)/$${xtrx_dir}/Makefile; \
+	if [[ $(BR2_LINUX_KERNEL_EXT_XTRX_LINUX_PCIE_DRV_ENABLE_WA) == y ]]; then \
+		sed -i 's,#undef VA_DMA_ADDR_FIXUP,//#undef VA_DMA_ADDR_FIXUP,g' $(LINUX_DIR)/$${dest}/xtrx_linux_pcie_drv/xtrx.c; \
+	fi
 endef

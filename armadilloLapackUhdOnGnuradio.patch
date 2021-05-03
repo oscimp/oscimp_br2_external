@@ -34,36 +34,34 @@ Index: buildroot/package/armadillo/armadillo.mk
  ARMADILLO_INSTALL_STAGING = YES
  ARMADILLO_LICENSE = Apache-2.0
  ARMADILLO_LICENSE_FILES = LICENSE.txt
-Index: buildroot/package/gnuradio/gnuradio.mk
+Index: buildroot/package/gr-osmosdr/Config.in
 ===================================================================
---- buildroot.orig/package/gnuradio/gnuradio.mk
-+++ buildroot/package/gnuradio/gnuradio.mk
-@@ -149,6 +149,13 @@ else
- GNURADIO_CONF_OPTS += -DENABLE_GR_TRELLIS=OFF
+--- buildroot.orig/package/gr-osmosdr/Config.in
++++ buildroot/package/gr-osmosdr/Config.in
+@@ -43,4 +43,10 @@
+ 	help
+ 	  Enable RFSPACE Receivers support
+ 
++config BR2_PACKAGE_GR_OSMOSDR_XTRX
++	bool "XTRX Receivers support"
++	depends on BR2_PACKAGE_LIBXTRX
++	help
++	  Enable XTRX Receivers support
++
+ endif
+Index: buildroot/package/gr-osmosdr/gr-osmosdr.mk
+===================================================================
+--- buildroot.orig/package/gr-osmosdr/gr-osmosdr.mk
++++ buildroot/package/gr-osmosdr/gr-osmosdr.mk
+@@ -54,4 +54,11 @@
+ GR_OSMOSDR_CONF_OPTS += -DENABLE_RFSPACE=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_GNURADIO_UHD),y)
-+GNURADIO_DEPENDENCIES += uhd-pluto
-+GNURADIO_CONF_OPTS += -DENABLE_GR_UHD=ON
++ifeq ($(BR2_PACKAGE_GR_OSMOSDR_XTRX),y)
++GR_OSMOSDR_CONF_OPTS += -DENABLE_XTRX=ON
++GR_OSMOSDR_DEPENDENCIES += libxtrx
 +else
-+GNURADIO_CONF_OPTS += -DENABLE_GR_UHD=OFF
++GR_OSMOSDR_CONF_OPTS += -DENABLE_XTRX=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_GNURADIO_UTILS),y)
- GNURADIO_CONF_OPTS += -DENABLE_GR_UTILS=ON
- else
-Index: buildroot/package/gnuradio/Config.in
-===================================================================
---- buildroot.orig/package/gnuradio/Config.in
-+++ buildroot/package/gnuradio/Config.in
-@@ -154,4 +154,10 @@ config BR2_PACKAGE_GNURADIO_TRELLIS
- 	help
- 	  Trellis coded modulation blocks
- 
-+config BR2_PACKAGE_GNURADIO_UHD
-+	bool "gr-uhd support"
-+	select BR2_PACKAGE_UHD_PLUTO
-+	help
-+	  libUHD support
-+
- endif
+ $(eval $(cmake-package))

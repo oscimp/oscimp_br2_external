@@ -1,0 +1,25 @@
+Index: xtrx_linux_pcie_drv-5ae3a3e877e5b04da6e1cfdcca2d2f124857ddb0/xtrx.c
+===================================================================
+--- xtrx_linux_pcie_drv-5ae3a3e877e5b04da6e1cfdcca2d2f124857ddb0.orig/xtrx.c
++++ xtrx_linux_pcie_drv-5ae3a3e877e5b04da6e1cfdcca2d2f124857ddb0/xtrx.c
+@@ -27,6 +27,7 @@
+ #include <linux/kdev_t.h>
+ #include <linux/fs.h>
+ #include <linux/cdev.h>
++#include <linux/dma-direct.h>
+ #include <linux/sched.h>
+ #include <linux/poll.h>
+ #include <linux/mm.h>
+@@ -177,9 +178,10 @@ MODULE_VERSION("0.1");
+  * mmaped to userspce. Convertion DMA->PA->VA does the trick on that
+  * platforms
+  */
+-#ifdef CONFIG_CPU_RK3399
++//#ifdef CONFIG_CPU_RK3399
+ #define VA_DMA_ADDR_FIXUP
+-#endif
++#undef VA_DMA_ADDR_FIXUP
++//#endif
+ 
+ 
+ static void xtrx_writel(struct xtrx_dev *dev, unsigned int off, unsigned int value)

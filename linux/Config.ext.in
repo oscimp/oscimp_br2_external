@@ -1,6 +1,15 @@
 config BR2_LINUX_KERNEL_EXT_XTRX_LINUX_PCIE_DRV
-	bool "example-external-driver"
+	bool "XTRX PCI driver"
 	select BR2_PACKAGE_XTRX_LINUX_PCIE_DRV
 	help
 	  Example external driver
 
+if BR2_LINUX_KERNEL_EXT_XTRX_LINUX_PCIE_DRV
+
+config BR2_LINUX_KERNEL_EXT_XTRX_LINUX_PCIE_DRV_ENABLE_WA
+	bool "enable a fix for pci_alloc_consistent"
+	default y
+	help
+	  enable a work around with pci_alloc_consistent and VA
+
+endif
