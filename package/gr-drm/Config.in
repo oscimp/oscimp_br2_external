@@ -1,0 +1,12 @@
+config BR2_PACKAGE_GR_DRM
+	bool "gr-drm"
+	depends on BR2_PACKAGE_FAAC
+	depends on BR2_PACKAGE_GNURADIO
+	select BR2_PACKAGE_GNURADIO_DIGITAL
+	select BR2_PACKAGE_GNURADIO_TRELLIS
+	select BR2_PACKAGE_BOOST
+	select BR2_PACKAGE_CPPUNIT
+	help
+	  GNU Radio DRM source
+          
+	  https://github.com/kit-cel/gr-drm

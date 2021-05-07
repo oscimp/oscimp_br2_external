@@ -1,0 +1,43 @@
+From f4418323bc209d401327f89efbbf8ade570a7b7f Mon Sep 17 00:00:00 2001
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Date: Mon, 3 May 2021 17:31:18 +0200
+Subject: [PATCH] fix build with boost 1.7.3
+
+boost/detail/endian.hpp has been marked as deprecated since boost 1.69.0.
+This file and boost/predef/detail/endian_compat.h are no more available.
+
+This patch suppress this header in some file, where not needed and move
+to correct header and new constants. It's retrocompatible for at least all
+boost release > 1.69.0
+
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ lib/wavfile_drm.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/wavfile_drm.cc b/lib/wavfile_drm.cc
+index 78b45d1..0a91d54 100644
+--- a/lib/wavfile_drm.cc
++++ b/lib/wavfile_drm.cc
+@@ -27,7 +27,7 @@
+ #include <gnuradio/blocks/wavfile.h>
+ #include <cstring>
+ #include <stdint.h>
+-#include <boost/detail/endian.hpp> //BOOST_BIG_ENDIAN
++#include <boost/predef/other/endian.h> //BOOST_ENDIAN_BIG_BYTE
+ 
+ namespace gr {
+   namespace drm {
+@@ -36,7 +36,7 @@ namespace gr {
+ 
+     // Basically, this is the opposite of htonx() and ntohx()
+     // Define host to/from worknet (little endian) short and long
+-#ifdef BOOST_BIG_ENDIAN
++#ifdef BOOST_ENDIAN_BIG_BYTE
+ 
+     static inline uint16_t __gri_wav_bs16(uint16_t x)
+     {
+-- 
+2.30.2
+
