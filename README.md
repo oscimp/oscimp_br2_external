@@ -2,7 +2,7 @@
 BR2_EXTERNAL framework for OscillatorIMP supported peripherals, most significantly
 software defined radio applications on Raspberry Pi(3,4)
 
-This support has been tested with the latest stable release of buildroot (2020.11.1) and git master branch.
+This support has been tested with the latest stable release of buildroot (2021.02.1) and git master branch.
 
 How-to use it
 =============
