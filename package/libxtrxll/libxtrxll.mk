@@ -9,6 +9,8 @@ LIBXTRXLL_SITE = $(call github,xtrx-sdr,libxtrxll,$(LIBXTRXLL_VERSION))
 LIBXTRXLL_LICENSE = LGPL-2.1+
 LIBXTRXLL_LICENSE_FILES = LICENSE
 
+LIBXTRXLL_DEPENDENCIES += xtrx_linux_pcie_drv
+
 # libxtrxll prevents doing an in-source-tree build
 LIBXTRXLL_SUPPORTS_IN_SOURCE_BUILD = NO
 
