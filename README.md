@@ -18,11 +18,16 @@ Adding support for these packages requires sourcing the **sourceme.ggm** file (`
 to add the **BR2_EXTERNAL** variable definition (alternatively, one might want to add <code>export
 BR2_EXTERNAL=/somewhere/oscimp_br2_external</code> to the *.bashrc* initialization file).
 
-In the buildroot directory  
+For compiling ``gnss-sdr`` using this Buildroot package definition, make sure to apply the patch *prior* to configuring Buildroot: from the root Buildroot directory,
+```bash
+patch -p1 < armadilloLapackUhdOnGnuradio.patch
+```
+
+Configuring Buildroot with GNU Radio support is achieved by running from the Buildroot root directory  
 ```bash
 make raspberrypi4_64_gnuradio_defconfig
 ```
-will configure buildroot for the Raspberry Pi4 supporting the 64 bit instructions and GNU Radio. For
+This will configure buildroot for the Raspberry Pi4 supporting the 64 bit instructions and GNU Radio. For
 the Compute Module 4,
 ```bash
 make raspberrypicm4_64_gnuradio_defconfig
