@@ -1,0 +1,9 @@
+config BR2_PACKAGE_HOST_WISHBONE_GEN
+	bool "host wishbone-gen"
+	depends on BR2_PACKAGE_LUA_5_1
+	help
+	  wbgen2 is a tool for generating VHDL/Verilog cores which
+	  implement Wishbone bus slaves with certain registers,
+	  memory blocks, FIFOs and interrupts.
+
+	  https://ohwr.org/project/wishbone-gen
