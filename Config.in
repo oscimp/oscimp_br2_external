@@ -25,4 +25,4 @@ source "$BR2_EXTERNAL_OSCBR2EXTERNAL_PATH/package/mock-turtle/Config.in"
 source "$BR2_EXTERNAL_OSCBR2EXTERNAL_PATH/package/spec-binaries/Config.in"
 source "$BR2_EXTERNAL_OSCBR2EXTERNAL_PATH/package/wishbone-gen/Config.in.host"
 source "$BR2_EXTERNAL_OSCBR2EXTERNAL_PATH/package/wrtd-binaries/Config.in"
-
+source "$BR2_EXTERNAL_OSCBR2EXTERNAL_PATH/package/zio/Config.in"

@@ -1,0 +1,86 @@
+diff --git a/drivers/zio/chardev.c b/drivers/zio/chardev.c
+index ea61829..28ad9d0 100644
+--- a/drivers/zio/chardev.c
++++ b/drivers/zio/chardev.c
+@@ -429,6 +429,9 @@ static ssize_t zio_generic_read(struct file *f, char __user *ubuf,
+ 	struct zio_channel *chan = priv->chan;
+ 	struct zio_bi *bi = chan->bi;
+ 	struct zio_block *block;
++#if KERNEL_VERSION(4, 18, 0) <= LINUX_VERSION_CODE
++	struct zio_control zio_ctrl;
++#endif
+ 	int (*can_read)(struct zio_f_priv *);
+ 	int fault, rflags;
+ 
+@@ -469,7 +472,12 @@ static ssize_t zio_generic_read(struct file *f, char __user *ubuf,
+ 				mutex_unlock(&chan->user_lock);
+ 				continue;
+ 			}
++#if KERNEL_VERSION(4, 18, 0) <= LINUX_VERSION_CODE
++			memcpy(&zio_ctrl, zio_get_ctrl(block), sizeof(struct zio_control));
++			fault = copy_to_user(ubuf, &zio_ctrl, count);
++#else
+ 			fault = copy_to_user(ubuf, zio_get_ctrl(block), count);
++#endif
+ 			mutex_unlock(&chan->user_lock);
+ 			if (fault)
+ 				return -EFAULT;
+diff --git a/drivers/zio/core.c b/drivers/zio/core.c
+index f1d7e4c..1dd88b4 100644
+--- a/drivers/zio/core.c
++++ b/drivers/zio/core.c
+@@ -139,13 +139,13 @@ static int __init zio_init(void)
+ 
+ 	err = zio_default_buffer_init();
+ 	if (err)
+-		pr_warning("%s: cannot register default buffer\n", __func__);
++		pr_warn("%s: cannot register default buffer\n", __func__);
+ 	err = zio_default_trigger_init();
+ 	if (err)
+-		pr_warning("%s: cannot register default trigger\n", __func__);
++		pr_warn("%s: cannot register default trigger\n", __func__);
+ 	if (zio_sniffdev_init())
+-		pr_warning("%s: cannot initialize /dev/zio-sniff.ctrl\n",
+-			   __func__);
++		pr_warn("%s: cannot initialize /dev/zio-sniff.ctrl\n",
++			__func__);
+ 
+ 	pr_info("zio-core had been loaded\n");
+ 	return 0;
+diff --git a/drivers/zio/devices/zio-loop.c b/drivers/zio/devices/zio-loop.c
+index 4edd97f..c88acda 100644
+--- a/drivers/zio/devices/zio-loop.c
++++ b/drivers/zio/devices/zio-loop.c
+@@ -186,6 +186,7 @@ static int zloop_raw_output(struct zio_cset *cset)
+ 
+ 	case ZLOOP_CSET_OUT_DATA:
+ 		index = ZLOOP_TYPE_READ_DATA;
++		/*@fallthrough@*/
+ 	case ZLOOP_CSET_OUT_CTRLDATA:
+ 		if (index < 0)
+ 			index = ZLOOP_TYPE_READ_CTRLDATA;
+diff --git a/drivers/zio/objects.c b/drivers/zio/objects.c
+index 61e5719..c9eadf3 100644
+--- a/drivers/zio/objects.c
++++ b/drivers/zio/objects.c
+@@ -1223,7 +1223,7 @@ static int zobj_unique_name(struct zio_object_list *zobj_list, const char *name)
+ 		return -EINVAL;
+ 	}
+ 	if (strlen(name) > ZIO_OBJ_NAME_LEN)
+-		pr_warning("ZIO: name too long, cut to %d characters\n",
++		pr_warn("ZIO: name too long, cut to %d characters\n",
+ 			ZIO_OBJ_NAME_LEN);
+ 
+ 	pr_debug("%s\n", __func__);
+diff --git a/drivers/zio/sysfs.c b/drivers/zio/sysfs.c
+index 42f292a..9f0ca40 100644
+--- a/drivers/zio/sysfs.c
++++ b/drivers/zio/sysfs.c
+@@ -764,6 +764,7 @@ static ssize_t zio_store_alarm(struct device *dev,
+ 	switch (sscanf(buf, "%i %i", &v1, &v2)) {
+ 	case 2:
+ 		ctrl->drv_alarms &= (~v2);
++		/*@fallthrough@*/
+ 	case 1:
+ 		ctrl->zio_alarms &= (~v1);
+ 		break;
