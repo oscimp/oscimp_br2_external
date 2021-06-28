@@ -1,0 +1,13 @@
+diff --git a/software/lib/libmockturtle.c b/software/lib/libmockturtle.c
+index 7019146..9a0ddcd 100644
+--- a/software/lib/libmockturtle.c
++++ b/software/lib/libmockturtle.c
+@@ -521,7 +521,7 @@ int trtl_cpu_load_application_raw(struct trtl_dev *trtl,
+ 	struct trtl_desc *wdesc = (struct trtl_desc *)trtl;
+ 	char path[TRTL_PATH_LEN + TRTL_NAME_LEN + 1 + 3];
+ 	int fd;
+-	ssize_t ret;
++	ssize_t ret = 0;
+ 	size_t i = 0;
+ 
+ 	snprintf(path, sizeof(path), "%s/%s-%02u",
