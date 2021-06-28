@@ -1,0 +1,6 @@
+config BR2_PACKAGE_SPEC_BINARIES
+	bool "spec-binaries"
+	help
+	  A simple 4-lane PCIe carrier for a low pin count FPGA Mezzanine Card (VITA 57).
+
+	  https://ohwr.org/project/spec
