@@ -23,5 +23,5 @@ source "$BR2_EXTERNAL_OSCBR2EXTERNAL_PATH/package/gr-drm/Config.in"
 comment "WRTD Packages"
 source "$BR2_EXTERNAL_OSCBR2EXTERNAL_PATH/package/mock-turtle/Config.in"
 source "$BR2_EXTERNAL_OSCBR2EXTERNAL_PATH/package/wishbone-gen/Config.in.host"
-source "$BR2_EXTERNAL_OSCBR2EXTERNAL_PATH/package/wrtd/Config.in"
+source "$BR2_EXTERNAL_OSCBR2EXTERNAL_PATH/package/wrtd-binaries/Config.in"
 

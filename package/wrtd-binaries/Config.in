@@ -1,0 +1,8 @@
+config BR2_PACKAGE_WRTD_BINARIES
+	bool "wrtd-binaries"
+	help
+	  White Rabbit Trigger Distribution (WRTD) is a generic
+	  framework  for distributing triggers (events) between
+	  Nodes over a White Rabbit network.
+
+	  https://ohwr.org/project/wrtd
