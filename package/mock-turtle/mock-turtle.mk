@@ -10,7 +10,7 @@ MOCK_TURTLE_SITE_METHOD = git
 
 MOCK_TURTLE_INSTALL_STAGING = YES
 
-MOCK_TURTLE_DEPENDENCIES += host-wishbone-gen python3
+MOCK_TURTLE_DEPENDENCIES += host-python3 host-wishbone-gen python3
 
 define MOCK_TURTLE_BUILD_CMDS
 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
@@ -24,19 +24,19 @@ endef
 define MOCK_TURTLE_INSTALL_STAGING_CMDS
 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
 		-C $(@D)/software/include install \
-		INCLUDEDESTDIR=$(STAGING_DIR)/include
+		INCLUDEDESTDIR=$(STAGING_DIR)/usr/include
 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
 		-C $(@D)/software/lib install \
-		DESTLIBDIR=$(STAGING_DIR)/lib
+		DESTLIBDIR=$(STAGING_DIR)/usr/lib
 endef
 
 define MOCK_TURTLE_INSTALL_TARGET_CMDS
 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
 		-C $(@D)/software/lib install \
-		DESTLIBDIR=$(TARGET_DIR)/lib
+		DESTLIBDIR=$(TARGET_DIR)/usr/lib
 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
 		-C $(@D)/software/tools install \
-	       	BINDESTDIR=$(TARGET_DIR)/bin
+	       	BINDESTDIR=$(TARGET_DIR)/usr/bin
 	( \
 		cd $(@D)/software/lib/PyMockTurtle; \
 		$(HOST_DIR)/bin/python3 setup.py install \

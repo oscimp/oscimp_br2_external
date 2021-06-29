@@ -16,8 +16,8 @@ define ZIO_BUILD_CMDS
 endef
 
 define ZIO_INSTALL_STAGING_CMDS
-	$(INSTALL) -d $(STAGING_DIR)/include/linux
-	$(INSTALL) -m 0644 $(@D)/include/linux/zio-user.h $(STAGING_DIR)/include/linux
+	$(INSTALL) -d $(STAGING_DIR)/usr/include/linux
+	$(INSTALL) -m 0644 $(@D)/include/linux/zio-user.h $(STAGING_DIR)/usr/include/linux
 endef
 
 define ZIO_INSTALL_TARGET_CMDS
@@ -25,7 +25,7 @@ define ZIO_INSTALL_TARGET_CMDS
 		$(@D)/tools/zio-dump \
 		$(@D)/tools/zio-cat-file \
 	       	$(@D)/tools/test-dtc \
-		$(TARGET_DIR)/bin
+		$(TARGET_DIR)/usr/bin
 endef
 
 $(eval $(generic-package))

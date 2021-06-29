@@ -18,13 +18,13 @@ define FMC_ADC_100M_BUILD_CMDS
 endef
 
 define FMC_ADC_100M_INSTALL_STAGING_CMDS
-	$(INSTALL) -m 0644 $(@D)/kernel/fmc-adc-100m14b4cha.h $(STAGING_DIR)/include
+	$(INSTALL) -m 0644 $(@D)/kernel/fmc-adc-100m14b4cha.h $(STAGING_DIR)/usr/include
 endef
 
 define FMC_ADC_100M_INSTALL_TARGET_CMDS
 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
 		-C $(@D)/tools install \
-		DESTDIR=$(TARGET_DIR)
+		DESTDIR=$(TARGET_DIR)/usr
 endef
 
 $(eval $(generic-package))
