@@ -1,0 +1,13 @@
+diff --git a/software/lib/libwrtd-reconfigure.c b/software/lib/libwrtd-reconfigure.c
+index 516b72c..2843b94 100644
+--- a/software/lib/libwrtd-reconfigure.c
++++ b/software/lib/libwrtd-reconfigure.c
+@@ -222,7 +222,7 @@ static enum wrtd_status wrtd_reconfigure_place(struct wrtd_dev *wrtd,
+                         }
+                 }
+ 
+-                struct wrtd_root *root;
++                struct wrtd_root *root = NULL;
+                 /* Set destination cpu and channel.  */
+                 status = wrtd_find_channel(wrtd, map, rule->conf.dest_id,
+                                            WRTD_CH_DIR_OUT, &dev, &ch);
