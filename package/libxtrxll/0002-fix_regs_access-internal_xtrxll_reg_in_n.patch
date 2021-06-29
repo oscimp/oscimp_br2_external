@@ -1,0 +1,28 @@
+Index: libxtrxll-1b6eddfbedc700efb6f7e3c3594e43ac6ff29ea4/mod_pcie/xtrxll_pcie_linux.c
+===================================================================
+--- libxtrxll-1b6eddfbedc700efb6f7e3c3594e43ac6ff29ea4.orig/mod_pcie/xtrxll_pcie_linux.c
++++ libxtrxll-1b6eddfbedc700efb6f7e3c3594e43ac6ff29ea4/mod_pcie/xtrxll_pcie_linux.c
+@@ -107,7 +107,10 @@ static void internal_xtrxll_reg_out_n(st
+ 	//if (count == 2) {
+ 	//	*((uint64_t*)&dev->mmap_xtrxll_regs[streg]) = *((uint64_t*)&to_write[0]);
+ 	//} else {
+-		memcpy((void*)&dev->mmap_xtrxll_regs[streg], to_write, count * 4);
++		for (i = 0; i < count; i++) {
++			__atomic_store_n(&dev->mmap_xtrxll_regs[streg+i], to_write[i],
++					 /*__ATOMIC_RELEASE*/ __ATOMIC_SEQ_CST);
++		}
+ 	//}
+ 	__atomic_thread_fence(__ATOMIC_SEQ_CST);
+ 
+@@ -126,7 +129,10 @@ static void internal_xtrxll_reg_in_n(str
+ 	if (count == 2) {
+ 		*((uint64_t*)&to_read[0]) = *((uint64_t*)&dev->mmap_xtrxll_regs[streg]);
+ 	} else {
+-		memcpy(to_read, (void*)&dev->mmap_xtrxll_regs[streg], count * 4);
++		for (i = 0; i < count; i++) {
++			to_read[i] = (__atomic_load_n(&dev->mmap_xtrxll_regs[streg+i],
++										   /*__ATOMIC_ACQUIRE*/ __ATOMIC_SEQ_CST));
++		}
+ 	}
+ 
+ 	for (i = 0; i < count; i++) {
