@@ -1,0 +1,139 @@
+From d3ec0a6e4ecbb44d5a57581c7c53e61c057c4840 Mon Sep 17 00:00:00 2001
+From: marionm <mathis.marion@grenoble-inp.org>
+Date: Fri, 20 Aug 2021 11:37:53 +0200
+Subject: [PATCH 2/2] Kernel 4.4: use fwnode for irq domain
+
+When creating an IRQ domain, the code used to store a device struct
+pointer in the `of_node` field of the irq_domain struct returned by
+`irq_domain_add_linear`. This was done by casting to a void pointer and
+passing as the first argument of the function.
+
+In the SPEC repository (and supposedly other depending repositories),
+we would then get back the irq_domain struct by calling `irq_find_host`
+with again a device struct pointer casted to a void pointer as the
+argument. The function would compare the addresses of the 2 device
+structs and return the right irq_domain.
+
+This trick was most likely due to the fact that the IRQ domain API was
+conceived around OpenFirmware before version 4.4, and that the project
+should work for ACPI.
+A workaround for kernel 4.7 was written, which involved using a `select`
+function, and passing the address of the device struct as a parameter.
+It was particularly ugly as it would require getting around the
+`irq_find_host` to call immediately `irq_find_matching_fwspec` and pass
+in the address of the wanted device struct as a parameter in a hacky way
+to fit it inside two 32 bit integers.
+
+Kernel version 4.4 introduced fwnodes, which would make easier working
+with ACPI. Instead of repeating the hacky workaround (which would result
+in a kernel error on later kernels when calling irq_domain_add_linear),
+I allocated a fwnode_handle struct before creating a new IRQ domain.
+Then I used the new irq_domain_create_* API to get an irq_domain using
+this fwnode. I also took care of disallocating the fwnode_handle.
+
+On the other end, we can just call `irq_find_matching_fwnode` and pass
+dev.fwnode as a parameter.
+
+Signed-off-by: Gwenhael GOAVEC <gwenhael.goavec@femto-st.fr>
+Signed-off-by: marionm <mathis.marion@grenoble-inp.org>
+---
+ software/htvic/drivers/htvic.c | 50 ++++++++++++++++------------------
+ 1 file changed, 24 insertions(+), 26 deletions(-)
+
+diff --git a/software/htvic/drivers/htvic.c b/software/htvic/drivers/htvic.c
+index 2f87aa7..ce6b2b6 100644
+--- a/software/htvic/drivers/htvic.c
++++ b/software/htvic/drivers/htvic.c
+@@ -269,29 +269,6 @@ static struct irq_chip htvic_chip = {
+ 	.irq_set_type = htvic_irq_set_type,
+ };
+ 
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,7,0)
+-static int htvic_irq_domain_select(struct irq_domain *d, struct irq_fwspec *fwspec,
+-		      enum irq_domain_bus_token bus_token)
+-{
+-	struct htvic_device *htvic = d->host_data;
+-	/*
+-	 * FIXME this should point to htvic->pdev->dev.parent. Today it is not
+-	 * a problem for CERN-like installations, so we leave it like this
+-	 * so that the WR-stating kit works.
+-	 */
+-	struct device *dev = &htvic->pdev->dev;
+-	struct device *req_dev;
+-
+-	if(fwspec->param_count != 2)
+-		return 0;
+-
+-	req_dev = (struct device *) ((((unsigned long) fwspec->param[0]) << 32) |
+-		(((unsigned long) fwspec->param[1]) & 0xFFFFFFFF));
+-
+-	return (dev == req_dev);
+-}
+-#endif
+-
+ /**
+  * Given the hardware IRQ and the Linux IRQ number (virtirq), configure the
+  * Linux IRQ number in order to handle properly the incoming interrupts
+@@ -321,9 +298,6 @@ static int htvic_irq_domain_map(struct irq_domain *h,
+ 
+ 
+ static struct irq_domain_ops htvic_irq_domain_ops = {
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,7,0)
+-	.select = htvic_irq_domain_select,
+-#endif
+ 	.map = htvic_irq_domain_map,
+ };
+ 
+@@ -335,11 +309,27 @@ static int htvic_irq_mapping(struct htvic_device *htvic)
+ {
+ 	int i, irq;
+ 
++#if KERNEL_VERSION(4, 4, 0) <= LINUX_VERSION_CODE
++	htvic->pdev->dev.fwnode = irq_domain_alloc_fwnode(NULL);
++	if (!htvic->pdev->dev.fwnode) {
++		dev_err(&htvic->pdev->dev, "Could not allocate fwnode");
++		return -ENOMEM;
++	}
++	htvic->domain = irq_domain_create_linear(htvic->pdev->dev.fwnode,
++					      VIC_MAX_VECTORS,
++					      &htvic_irq_domain_ops, htvic);
++	if (!htvic->domain) {
++		irq_domain_free_fwnode(htvic->pdev->dev.fwnode);
++		htvic->pdev->dev.fwnode = NULL;
++		return -ENOMEM;
++	}
++#else
+ 	htvic->domain = irq_domain_add_linear((void *)&htvic->pdev->dev,
+ 					      VIC_MAX_VECTORS,
+ 					      &htvic_irq_domain_ops, htvic);
+ 	if (!htvic->domain)
+ 		return -ENOMEM;
++#endif
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0)
+ 	htvic->domain->name = kasprintf(GFP_KERNEL, "%s",
+ 					dev_name(&htvic->pdev->dev));
+@@ -362,6 +352,10 @@ static int htvic_irq_mapping(struct htvic_device *htvic)
+ 
+ out:
+ 	irq_domain_remove(htvic->domain);
++#if KERNEL_VERSION(4, 4, 0) <= LINUX_VERSION_CODE
++	irq_domain_free_fwnode(htvic->pdev->dev.fwnode);
++	htvic->pdev->dev.fwnode = NULL;
++#endif
+ 	return -EPERM;
+ }
+ 
+@@ -613,6 +607,10 @@ static int htvic_remove(struct platform_device *pdev)
+ 	 * Clear the memory and restore flags when needed
+ 	 */
+ 	irq_domain_remove(htvic->domain);
++#if KERNEL_VERSION(4, 4, 0) <= LINUX_VERSION_CODE
++	irq_domain_free_fwnode(htvic->pdev->dev.fwnode);
++	htvic->pdev->dev.fwnode = NULL;
++#endif
+ 	kfree(htvic);
+ 	dev_set_drvdata(&pdev->dev, NULL);
+ 
+-- 
+2.30.2
+
