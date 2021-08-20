@@ -3,7 +3,7 @@
 # gr-rpitx
 #
 ################################################################################
-GR_RPITX_VERSION = fea63e7f411c4b6565bf6bcc8fc4c6ecd84b277e
+GR_RPITX_VERSION = a62972691f7a72172fce7efdaec1cd1b0a37d652
 GR_RPITX_SITE = $(call github,jmfriedt,gr-rpitx,$(GR_RPITX_VERSION))
 GR_RPITX_INSTALL_STAGING = NO
 GR_RPITX_LICENSE = GPL-3.0
