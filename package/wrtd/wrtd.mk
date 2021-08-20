@@ -10,7 +10,7 @@ WRTD_SITE_METHOD = git
 
 WRTD_INSTALL_STAGING = YES
 
-WRTD_DEPENDENCIES += host-python3 host-python3-setuptools mock-turtle python3 python3-decorator python3-pyyaml
+WRTD_DEPENDENCIES += host-python3 host-python3-setuptools mock-turtle python3 python-decorator python-pyyaml
 
 WRTD_PYTHON_DIR = python$(PYTHON3_VERSION_MAJOR)
 

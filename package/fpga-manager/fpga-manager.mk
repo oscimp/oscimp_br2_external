@@ -14,8 +14,8 @@ FPGA_MANAGER_MODULE_SUBDIRS = drivers/fpga
 FPGA_MANAGER_MODULE_MAKE_OPTS = CONFIG_FPGA=m
 
 define FPGA_MANAGER_INSTALL_STAGING_CMDS
-	$(INSTALL) -d $(STAGING_DIR)/usr/include/linux/fpga
-	$(INSTALL) -m 0644 $(@D)/include/linux/fpga/*.h $(STAGING_DIR)/usr/include/linux/fpga
+	$(INSTALL) -d $(STAGING_DIR)/include/linux/fpga
+	$(INSTALL) -m 0644 $(@D)/include/linux/fpga/*.h $(STAGING_DIR)/include/linux/fpga
 endef
 
 $(eval $(kernel-module))
