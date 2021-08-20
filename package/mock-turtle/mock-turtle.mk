@@ -12,6 +12,9 @@ MOCK_TURTLE_INSTALL_STAGING = YES
 
 MOCK_TURTLE_DEPENDENCIES += host-python3 host-wishbone-gen python3
 
+MOCK_TURTLE_MODULE_SUBDIRS = software/kernel
+MOCK_TURTLE_MODULE_MAKE_OPTS = DKMS=0
+
 define MOCK_TURTLE_BUILD_CMDS
 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
 		-C $(@D)/software/include
@@ -44,4 +47,5 @@ define MOCK_TURTLE_INSTALL_TARGET_CMDS
 	)	
 endef
 
+$(eval $(kernel-module))
 $(eval $(generic-package))

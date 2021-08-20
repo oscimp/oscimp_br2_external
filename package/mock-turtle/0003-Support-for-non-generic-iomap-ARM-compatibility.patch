@@ -1,0 +1,63 @@
+From f20a583e661cbf5e565146f1cc188e5721043fff Mon Sep 17 00:00:00 2001
+From: Mathis MARION <mathis.marion@grenoble-inp.org>
+Date: Thu, 22 Jul 2021 14:06:24 +0200
+Subject: [PATCH 2/2] Support for non-generic iomap: ARM compatibility
+
+Some architectures such as ARM don't use asm-generic/iomap.h and instead
+define their own implementation for ioread32 and iowrite32.
+This can be checked using the CONFIG_GENERIC_IOMAP preprocessor.
+
+The signature used inside asm-generic/io.h uses volatile for the address
+parameter. Thus it is necessary to accomodate this change.
+
+Moreover, ARM uses macros to define ioread32be and iowrite32be, so it is
+necessary to define a function on top of the macro to allow for
+assignation.
+Note: other architectures may not use macros, or use macros for ioread32
+and iowrite32, in which case this patch may not work and has to be
+adapted.
+
+Signed-off-by: Gwenhael GOAVEC <gwenhael.goavec@femto-st.fr>
+Signed-off-by: Mathis MARION <mathis.marion@grenoble-inp.org>
+---
+ software/kernel/mockturtle-drv.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/software/kernel/mockturtle-drv.h b/software/kernel/mockturtle-drv.h
+index da3cba8..352b407 100644
+--- a/software/kernel/mockturtle-drv.h
++++ b/software/kernel/mockturtle-drv.h
+@@ -76,13 +76,30 @@ static inline uint32_t trtl_get_sequence(struct trtl_msg *msg)
+ 	return msg->data[1];
+ }
+ 
++#ifndef CONFIG_GENERIC_IOMAP
++static inline u32 (ioread32be)(const volatile void __iomem *addr)
++{
++	return ioread32be(addr);
++}
++
++static inline void (iowrite32be)(u32 value, volatile void __iomem *addr)
++{
++	iowrite32be(value, addr);
++}
++#endif
++
+ struct trtl_memory_ops {
++#ifdef CONFIG_GENERIC_IOMAP
+ #if KERNEL_VERSION(5, 8, 0) <= LINUX_VERSION_CODE
+ 	u32 (*read)(const void *addr);
+ #else
+ 	u32 (*read)(void *addr);
+ #endif
+ 	void (*write)(u32 value, void *addr);
++#else
++	u32 (*read)(const volatile void *addr);
++	void (*write)(u32 value, volatile void *addr);
++#endif
+ };
+ 
+ extern struct trtl_memory_ops memops;
+-- 
+2.27.0
+

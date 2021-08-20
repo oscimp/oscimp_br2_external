@@ -1,3 +1,13 @@
+From 67f2cd95cf2e92eee21a4be1dc2cf52e8fd94fa2 Mon Sep 17 00:00:00 2001
+From: marionm <mathis.marion@grenoble-inp.org>
+Date: Fri, 20 Aug 2021 09:52:22 +0200
+Subject: [PATCH] Uninitialized variable
+
+Signed-off-by: marionm <mathis.marion@grenoble-inp.org>
+---
+ software/lib/libmockturtle.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
 diff --git a/software/lib/libmockturtle.c b/software/lib/libmockturtle.c
 index 7019146..9a0ddcd 100644
 --- a/software/lib/libmockturtle.c
@@ -11,3 +21,6 @@ index 7019146..9a0ddcd 100644
  	size_t i = 0;
  
  	snprintf(path, sizeof(path), "%s/%s-%02u",
+-- 
+2.30.2
+
