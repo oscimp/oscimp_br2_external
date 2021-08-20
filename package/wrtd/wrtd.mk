@@ -14,6 +14,8 @@ WRTD_DEPENDENCIES += host-python3 host-python3-setuptools mock-turtle python3 py
 
 WRTD_PYTHON_DIR = python$(PYTHON3_VERSION_MAJOR)
 
+WRTD_MODULE_SUBDIRS = software/drivers
+
 define WRTD_BUILD_CMDS
 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
 		-C $(@D)/software/lib
@@ -47,4 +49,5 @@ define WRTD_INSTALL_TARGET_CMDS
 	)
 endef
 
+$(eval $(kernel-module))
 $(eval $(generic-package))
