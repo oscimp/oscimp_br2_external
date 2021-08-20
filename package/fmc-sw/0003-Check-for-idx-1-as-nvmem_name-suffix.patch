@@ -1,0 +1,59 @@
+From 820aa9aa99d567a6c0dfb55b038c30631159a227 Mon Sep 17 00:00:00 2001
+From: marionm <mathis.marion@grenoble-inp.org>
+Date: Fri, 20 Aug 2021 11:50:20 +0200
+Subject: [PATCH 3/3] Check for idx=1 as nvmem_name suffix
+
+During some testing on a 5.11 kernel, I realized that
+the ID was 1 instead of the hardcoded 0.
+It is still left to figure out if this suffix can be
+anything else than 0 or 1.
+
+Improved error checking, since nvmem may be an error
+pointer instead of NULL.
+
+Signed-off-by: Gwenhael GOAVEC <gwenhael.goavec@femto-st.fr>
+Signed-off-by: Mathis MARION <mathis.marion@grenoble-inp.org>
+---
+ drivers/fmc/fmc-eeprom.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/fmc/fmc-eeprom.c b/drivers/fmc/fmc-eeprom.c
+index 7ae4b11..c3aa905 100644
+--- a/drivers/fmc/fmc-eeprom.c
++++ b/drivers/fmc/fmc-eeprom.c
+@@ -90,21 +90,24 @@ ssize_t fmc_slot_eeprom_read(struct fmc_slot *slot,
+ 	struct nvmem_device *nvmem;
+ 	char *nvmem_name;
+ 	/* 
+-	 * TODO Check if index can be anything else than zero and,
++	 * TODO Check if index can be anything else than 0 or 1 and,
+ 	 * if yes, how to get the proper value.
+ 	 */
+-	idx = 0;
+ 	len = strlen(dev_name(&slot->eeprom->dev)) + 2;
+ 	nvmem_name = kzalloc(len, GFP_KERNEL);
+ 	if (nvmem_name) {
+-		snprintf(nvmem_name, len, "%s%d",
+-			 dev_name(&slot->eeprom->dev), idx);
+-		nvmem = nvmem_device_get(&slot->dev, nvmem_name);
+-		if (nvmem) {
+-			err = nvmem_device_read(nvmem, offset, count, buf);
++		for (idx = 0; idx <= 1; idx++) {
++			snprintf(nvmem_name, len, "%s%d",
++				 dev_name(&slot->eeprom->dev), idx);
++			nvmem = nvmem_device_get(&slot->dev, nvmem_name);
++			if (!IS_ERR(nvmem)) {
++				err = nvmem_device_read(nvmem, offset, count, buf);
+ #if KERNEL_VERSION(5, 1, 0) <= LINUX_VERSION_CODE
+-			nvmem_device_put(nvmem);
++				nvmem_device_put(nvmem);
+ #endif
++				break;
++			}
++			err = PTR_ERR(nvmem);
+ 		}
+ 		kfree(nvmem_name);
+ 	}
+-- 
+2.30.2
+

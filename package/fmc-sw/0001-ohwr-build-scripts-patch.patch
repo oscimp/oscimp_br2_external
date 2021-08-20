@@ -1,0 +1,248 @@
+From 1857a0462203d7f8ad1d8145d610434b1d01c3f4 Mon Sep 17 00:00:00 2001
+From: marionm <mathis.marion@grenoble-inp.org>
+Date: Fri, 20 Aug 2021 11:46:40 +0200
+Subject: [PATCH 1/3] ohwr-build-scripts patch
+
+This patch was provided with the installation scripts provided by
+Dimitrios Lampridis here:
+https://gitlab.cern.ch/dlamprid/ohwr-build-scripts
+---
+ drivers/fmc/fmc-eeprom.c | 81 +++++++++++++++++++++++++++++++++++-----
+ drivers/fmc/fru-parse.c  |  8 ----
+ include/linux/fmc.h      |  9 ++++-
+ 3 files changed, 78 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/fmc/fmc-eeprom.c b/drivers/fmc/fmc-eeprom.c
+index a000a0d..2bd2a6f 100644
+--- a/drivers/fmc/fmc-eeprom.c
++++ b/drivers/fmc/fmc-eeprom.c
+@@ -7,9 +7,14 @@
+ #include <linux/module.h>
+ #include <linux/memory.h>
+ #include <linux/fmc.h>
++#include <linux/slab.h>
+ #include "fmc-internal.h"
+ #include "fmc-compat.h"
+ 
++#if KERNEL_VERSION(4, 6, 0) <= LINUX_VERSION_CODE
++#include <linux/nvmem-consumer.h>
++#endif
++
+ #define FRU_EEPROM_NAME "fru_eeprom"
+ 
+ /**
+@@ -17,11 +22,14 @@
+  */
+ #define FMC_EEPROM_TYPE_DEFAULT "24c02"
+ 
+-/**
+- * Setup function for the AT24C02 EEPROM. What we need to do here is to
+- * quickly validate the EEPROM content. The EEPROM should contain a valid
+- * FRU.
+- */
++#if KERNEL_VERSION(4, 6, 0) <= LINUX_VERSION_CODE
++const struct property_entry at24_24c02[AT24_NUM_PROPERTIES] = {
++	PROPERTY_ENTRY_U32("size", 256),
++	PROPERTY_ENTRY_U32("pagesize", 8),
++	PROPERTY_ENTRY_U32("address-width", 16),
++	{ }
++};
++#else
+ static void fmc_slot_eeprom_setup(struct memory_accessor *macc, void *context)
+ {
+ 	struct fmc_slot *slot = context;
+@@ -38,9 +46,10 @@ static const struct at24_platform_data at24_24c02 = {
+ 	.flags = 0,
+ 	.setup = fmc_slot_eeprom_setup,
+ };
++#endif /* KERNEL_VERSION(4, 6, 0) <= LINUX_VERSION_CODE */
+ 
+ /**
+- * Initialize I2C EEPROM info with standad values
++ * Initialize I2C EEPROM info with standard values
+  */
+ static void fmc_slot_eeprom_init(struct fmc_slot *slot,
+ 				 struct i2c_board_info *info,
+@@ -48,7 +57,11 @@ static void fmc_slot_eeprom_init(struct fmc_slot *slot,
+ {
+ 	strncpy(info->type, name, I2C_NAME_SIZE);
+ 	info->addr = FMC_EEPROM_ADDR_SPACE;
++#if KERNEL_VERSION(4, 6, 0) <= LINUX_VERSION_CODE
++	info->properties = slot->at24_data;
++#else
+ 	info->platform_data = &slot->at24_data;
++#endif
+ }
+ 
+ static void fmc_slot_eeprom_init_default(struct fmc_slot *slot,
+@@ -56,8 +69,12 @@ static void fmc_slot_eeprom_init_default(struct fmc_slot *slot,
+ {
+ 	memset(info, 0, sizeof(*info));
+ 	fmc_slot_eeprom_init(slot, info, FMC_EEPROM_TYPE_DEFAULT);
++#if KERNEL_VERSION(4, 6, 0) > LINUX_VERSION_CODE
+ 	memcpy(&slot->at24_data, &at24_24c02, sizeof(slot->at24_data));
+ 	slot->at24_data.context = slot;
++#else
++	memcpy(slot->at24_data, &at24_24c02, sizeof(slot->at24_data));
++#endif
+ }
+ 
+ /**
+@@ -66,13 +83,41 @@ static void fmc_slot_eeprom_init_default(struct fmc_slot *slot,
+ ssize_t fmc_slot_eeprom_read(struct fmc_slot *slot,
+ 			     void *buf, off_t offset, size_t count)
+ {
++	int err = 0;
++#if KERNEL_VERSION(4, 6, 0) <= LINUX_VERSION_CODE
++	int idx;
++	size_t len;
++	struct nvmem_device *nvmem;
++	char *nvmem_name;
++	/* 
++	 * TODO Check if index can be anything else than zero and,
++	 * if yes, how to get the proper value.
++	 */
++	idx = 0;
++	len = strlen(dev_name(&slot->eeprom->dev)) + 2;
++	nvmem_name = kzalloc(len, GFP_KERNEL);
++	if (nvmem_name) {
++		snprintf(nvmem_name, len, "%s%d",
++			 dev_name(&slot->eeprom->dev), idx);
++		nvmem = nvmem_device_get(&slot->dev, nvmem_name);
++		if (nvmem) {
++			err = nvmem_device_read(nvmem, offset, count, buf);
++#if KERNEL_VERSION(5, 1, 0) <= LINUX_VERSION_CODE
++			nvmem_device_put(nvmem);
++#endif
++		}
++		kfree(nvmem_name);
++	}
++#else
+ 	/*
+ 	 * TODO if we export this function, do we have to lock it when we
+ 	 * use it? Think about it
+ 	 */
+ 	if (!slot->macc || !slot->macc->read)
+ 		return -ENODEV;
+-	return slot->macc->read(slot->macc, buf, offset, count);
++	err = slot->macc->read(slot->macc, buf, offset, count);
++#endif
++	return err;
+ }
+ EXPORT_SYMBOL(fmc_slot_eeprom_read);
+ 
+@@ -152,7 +197,9 @@ void fmc_slot_eeprom_del(struct fmc_slot *slot)
+ 	sysfs_remove_link(&slot->dev.kobj, FRU_EEPROM_NAME);
+ 	i2c_unregister_device(slot->eeprom);
+ 	slot->eeprom = NULL;
++#if KERNEL_VERSION(4, 6, 0) > LINUX_VERSION_CODE
+ 	slot->macc = NULL;
++#endif
+ }
+ 
+ /**
+@@ -197,19 +244,25 @@ int fmc_slot_eeprom_type_set(struct fmc_slot *slot, const char *type)
+ 
+ 
+ 	memset(&i2c_info, 0, sizeof(i2c_info));
++#if KERNEL_VERSION(4, 6, 0) > LINUX_VERSION_CODE
+ 	memset(&slot->at24_data, 0, sizeof(slot->at24_data));
++#else
++	memset(slot->at24_data, 0, sizeof(slot->at24_data));
++#endif
+ 
+ 	len = (len * 1024) / 8;
+ 	/*
+ 	 * For sizes between 1K and 16K the EEPROM uses part of the device
+ 	 * address as internal memory address
+ 	 */
+-	if (len > 4096) /* 32K 4KiB */
+-		slot->at24_data.flags = AT24_FLAG_ADDR16;
+-	else if (len > 131072) /* 1024K 128KiB */
++	if (len > 131072) /* 1024K 128KiB */
+ 		return -EINVAL;
+ 
+ 	fmc_slot_eeprom_init(slot, &i2c_info, type);
++
++#if KERNEL_VERSION(4, 6, 0) > LINUX_VERSION_CODE
++	if (len > 4096) /* 32K 4KiB */
++		slot->at24_data.flags = AT24_FLAG_ADDR16;
+ 	slot->at24_data.byte_len = len;
+ 	slot->at24_data.page_size = 1; /* 1Byte page to play safe */
+ 	slot->at24_data.setup = fmc_slot_eeprom_setup;
+@@ -219,7 +272,15 @@ int fmc_slot_eeprom_type_set(struct fmc_slot *slot, const char *type)
+ 		i2c_info.type, i2c_info.addr,
+ 		slot->at24_data.byte_len, slot->at24_data.page_size,
+ 		slot->at24_data.flags);
++#else
++	slot->at24_data[0] = PROPERTY_ENTRY_U32("size", len);
++	slot->at24_data[1] = PROPERTY_ENTRY_U32("pagesize", 1);
++	if (len > 4096) /* 32K 4KiB */
++		slot->at24_data[2] = PROPERTY_ENTRY_U32("address-width", 16);
+ 
++	dev_dbg(&slot->dev, "%s 0x%x %d\n",
++		i2c_info.type, i2c_info.addr, len);
++#endif
+ 	return fmc_slot_eeprom_replace(slot, &i2c_info);
+ }
+ EXPORT_SYMBOL(fmc_slot_eeprom_type_set);
+diff --git a/drivers/fmc/fru-parse.c b/drivers/fmc/fru-parse.c
+index 52b997c..2fd95eb 100644
+--- a/drivers/fmc/fru-parse.c
++++ b/drivers/fmc/fru-parse.c
+@@ -5,12 +5,6 @@
+  */
+ 
+ #include <linux/version.h>
+-
+-#if KERNEL_VERSION(3, 11, 0) > LINUX_VERSION_CODE
+-
+-/*
+- * On kernel 3.11 and greater this is included
+- */
+ #include <linux/slab.h>
+ #include <linux/ipmi-fru.h>
+ 
+@@ -98,5 +92,3 @@ char *fru_get_part_number(struct fru_common_header *header)
+ 	return __fru_alloc_get_tl(header, 3);
+ }
+ EXPORT_SYMBOL(fru_get_part_number);
+-
+-#endif
+diff --git a/include/linux/fmc.h b/include/linux/fmc.h
+index 3bc5c12..7fd835f 100644
+--- a/include/linux/fmc.h
++++ b/include/linux/fmc.h
+@@ -11,13 +11,13 @@
+ #include <linux/spinlock.h>
+ #include <linux/version.h>
+ 
++#if KERNEL_VERSION(5, 1, 0) > LINUX_VERSION_CODE
+ #if KERNEL_VERSION(3, 10, 0) <= LINUX_VERSION_CODE
+ #include <linux/platform_data/at24.h>
+ #else
+ #include <linux/i2c/at24.h>
+ #endif
+-
+-
++#endif
+ 
+ #ifndef _LINUX_FMC_H
+ #define _LINUX_FMC_H
+@@ -84,8 +84,13 @@ struct fmc_slot {
+ 
+ 	struct i2c_client *eeprom;
+ 
++#if KERNEL_VERSION(4, 6, 0) <= LINUX_VERSION_CODE
++#define AT24_NUM_PROPERTIES 4
++	struct property_entry at24_data[AT24_NUM_PROPERTIES];
++#else
+ 	struct memory_accessor *macc;
+ 	struct at24_platform_data at24_data;
++#endif
+ };
+ 
+ /**
+-- 
+2.30.2
+
