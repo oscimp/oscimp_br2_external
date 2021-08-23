@@ -8,7 +8,7 @@ LINUX_EXTENSIONS += fpga-manager
 
 define FPGA_MANAGER_PREPARE_KERNEL
 	`# Remove the existing driver if it exists`; \
-	if [ -e $(LINUX_DIR)/drivers/fpga-manager ]; then \
+	if [ -e $(LINUX_DIR)/drivers/fpga ]; then \
 		rm -r $(LINUX_DIR)/drivers/fpga; \
 		sed -i '\:source "drivers/fpga/Kconfig":d' $(LINUX_DIR)/drivers/Kconfig; \
 		sed -i '\:obj-$$(CONFIG_FPGA)\t\t+= fpga/:d' $(LINUX_DIR)/drivers/Makefile; \
