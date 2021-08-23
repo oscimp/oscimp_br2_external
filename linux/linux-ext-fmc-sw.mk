@@ -11,7 +11,8 @@ define FMC_SW_PREPARE_KERNEL
 	DEST_DIR=$(LINUX_DIR)/drivers/wrtd_ref_spec150t_adc; \
 	mkdir -p $${DEST_DIR}; \
 	if [ ! -e $${DEST_DIR}/Kconfig ]; then \
-		echo "source \"drivers/wrtd_ref_spec150t_adc/Kconfig\"" >> $(LINUX_DIR)/drivers/Kconfig; \
+		sed -i "s:endmenu:source \"drivers/wrtd_ref_spec150t_adc/Kconfig\"\nendmenu:g" $(LINUX_DIR)/drivers/Kconfig; \
+		echo "obj-y += wrtd_ref_spec150t_adc/" >> $(LINUX_DIR)/drivers/Makefile; \
 	fi; \
 	\
 	`# Copy headers`; \
@@ -30,7 +31,7 @@ define FMC_SW_PREPARE_KERNEL
 	echo -e "\t  " >> $${DEST_DIR}/Kconfig; \
 	echo -e "\t  https://ohwr.org/project/fmc-sw" >> $${DEST_DIR}/fmc/Kconfig; \
 	\
-	echo "source drivers/wrtd_ref_spec150t_adc/fmc/Kconfig" >> $${DEST_DIR}/Kconfig; \
+	echo "source \"drivers/wrtd_ref_spec150t_adc/fmc/Kconfig\"" >> $${DEST_DIR}/Kconfig; \
 	\
 	`# Edit Makefile`; \
 	echo "obj-m += fmc/" >> $${DEST_DIR}/Makefile;

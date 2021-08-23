@@ -7,7 +7,7 @@
 LINUX_EXTENSIONS += fpga-manager
 
 define FPGA_MANAGER_PREPARE_KERNEL
-	`# Remove the existing driver is it exists`; \
+	`# Remove the existing driver if it exists`; \
 	if [ -e $(LINUX_DIR)/drivers/fpga ]; then \
 		rm -r $(LINUX_DIR)/drivers/fpga; \
 		sed -i "s:source \"drivers/fpga/Kconfig\"::g" $(LINUX_DIR)/drivers/Kconfig; \
@@ -18,7 +18,8 @@ define FPGA_MANAGER_PREPARE_KERNEL
 	DEST_DIR=$(LINUX_DIR)/drivers/wrtd_ref_spec150t_adc; \
 	mkdir -p $${DEST_DIR}; \
 	if [ ! -e $${DEST_DIR}/Kconfig ]; then \
-		echo "source \"drivers/wrtd_ref_spec150t_adc/Kconfig\"" >> $(LINUX_DIR)/drivers/Kconfig; \
+		sed -i "s:endmenu:source \"drivers/wrtd_ref_spec150t_adc/Kconfig\"\nendmenu:g" $(LINUX_DIR)/drivers/Kconfig; \
+		echo "obj-y += wrtd_ref_spec150t_adc/" >> $(LINUX_DIR)/drivers/Makefile; \
 	fi; \
 	\
 	`# Copy headers`; \
@@ -27,7 +28,7 @@ define FPGA_MANAGER_PREPARE_KERNEL
 	`# Copy sources`; \
 	cp -dpfr $(FPGA_MANAGER_DIR)/drivers/fpga $${DEST_DIR}; \
 	\
-	echo "source drivers/wrtd_ref_spec150t_adc/fpga/Kconfig" >> $${DEST_DIR}/Kconfig; \
+	echo "source \"drivers/wrtd_ref_spec150t_adc/fpga/Kconfig\"" >> $${DEST_DIR}/Kconfig; \
 	\
 	`# Edit Makefile`; \
 	echo "obj-m += fpga/" >> $${DEST_DIR}/Makefile;
