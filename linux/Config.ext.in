@@ -30,3 +30,15 @@ config BR2_LINUX_KERNEL_EXT_FPGA_MANAGER
 	  the kernel if it exists
 
 	  https://gitlab.cern.ch/coht/fpga-manager
+
+config BR2_LINUX_KERNEL_EXT_GENERAL_CORES
+	bool "general-cores"
+	help
+	  A collection of platform-independent cores such as memories,
+	  synchronizer circuits and Wishbone cores.
+	  /!\ This will erase the existing I2C Opencores driver from
+	  the kernel if it exists. Any project based on the original
+	  driver may not work afterwards.
+
+	  https://ohwr.org/project/general-cores
+
