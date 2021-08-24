@@ -90,4 +90,18 @@ config BR2_LINUX_KERNEL_EXT_ZIO
 
 	  https://ohwr.org/project/zio
 
+comment "wrtd needs lua 5.1"
+	depends on !BR2_PACKAGE_LUA_5_1
+
+config BR2_LINUX_KERNEL_EXT_WRTD
+	bool "wrtd"
+	depends on BR2_PACKAGE_LUA_5_1
+	select BR2_LINUX_KERNEL_EXT_MOCK_TURTLE
+	help
+	  White Rabbit Trigger Distribution (WRTD) is a generic
+	  framework  for distributing triggers (events) between
+	  Nodes over a White Rabbit network.
+
+	  https://ohwr.org/project/wrtd
+
 comment "WRTD drivers end"
