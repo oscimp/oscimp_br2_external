@@ -28,7 +28,7 @@ define FMC_SW_PREPARE_KERNEL
 	echo -e "\thelp" >> $${DEST_DIR}/fmc-sw/Kconfig; \
 	echo -e "\t  This project aims to provide basic support to FMC modules with respect" >> $${DEST_DIR}/fmc-sw/Kconfig; \
 	echo -e "\t  to the VITA 57.1 standard." >> $${DEST_DIR}/fmc-sw/Kconfig; \
-	echo -e "\t  " >> $${DEST_DIR}/Kconfig; \
+	echo -e "\t  " >> $${DEST_DIR}/fmc-sw/Kconfig; \
 	echo -e "\t  https://ohwr.org/project/fmc-sw" >> $${DEST_DIR}/fmc-sw/Kconfig; \
 	\
 	echo 'source "drivers/wrtd_ref_spec150t_adc/fmc-sw/Kconfig"' >> $${DEST_DIR}/Kconfig; \

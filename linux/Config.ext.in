@@ -14,6 +14,8 @@ config BR2_LINUX_KERNEL_EXT_XTRX_LINUX_PCIE_DRV_ENABLE_WA
 
 endif
 
+comment "WRTD related drivers"
+
 config BR2_LINUX_KERNEL_EXT_FMC_SW
 	bool "fmc-sw"
 	help
@@ -41,4 +43,16 @@ config BR2_LINUX_KERNEL_EXT_GENERAL_CORES
 	  driver may not work afterwards.
 
 	  https://ohwr.org/project/general-cores
+
+config BR2_LINUX_KERNEL_EXT_SPEC
+	bool "spec"
+	depends on BR2_PACKAGE_HOST_PYTHON3
+	select BR2_LINUX_KERNEL_EXT_FMC_SW
+	select BR2_LINUX_KERNEL_EXT_FPGA_MANAGER
+	select BR2_LINUX_KERNEL_EXT_GENERAL_CORES
+	select BR2_PACKAGE_HOST_CHEBY
+	help
+	  A simple 4-lane PCIe carrier for a low pin count FPGA Mezzanine Card (VITA 57).
+
+	  https://ohwr.org/project/spec
 
