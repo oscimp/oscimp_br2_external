@@ -14,7 +14,17 @@ config BR2_LINUX_KERNEL_EXT_XTRX_LINUX_PCIE_DRV_ENABLE_WA
 
 endif
 
-comment "WRTD related drivers"
+comment "WRTD drivers"
+
+config BR2_LINUX_KERNEL_EXT_FMC_ADC_100M
+	bool "fmc-adc-100m"
+	select BR2_LINUX_KERNEL_EXT_FMC_SW
+	select BR2_LINUX_KERNEL_EXT_ZIO
+	help
+	  FmcAdc100M14b4cha is a 4 channel 100MSPS 14 bit ADC low pin count
+	  FPGA Mezzanine Card (VITA 57).
+
+	  https://ohwr.org/project/fmc-adc-100m14b4cha
 
 config BR2_LINUX_KERNEL_EXT_FMC_SW
 	bool "fmc-sw"
@@ -44,6 +54,9 @@ config BR2_LINUX_KERNEL_EXT_GENERAL_CORES
 
 	  https://ohwr.org/project/general-cores
 
+comment "spec needs host-python3"
+	depends on !BR2_PACKAGE_HOST_PYTHON3
+
 config BR2_LINUX_KERNEL_EXT_SPEC
 	bool "spec"
 	depends on BR2_PACKAGE_HOST_PYTHON3
@@ -64,3 +77,4 @@ config BR2_LINUX_KERNEL_EXT_ZIO
 
 	  https://ohwr.org/project/zio
 
+comment WRTD drivers end
