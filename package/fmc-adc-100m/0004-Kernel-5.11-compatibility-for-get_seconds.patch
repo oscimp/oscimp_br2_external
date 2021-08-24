@@ -1,0 +1,33 @@
+From 9c764af503dd061b279490b11b393d4b49404d19 Mon Sep 17 00:00:00 2001
+From: marionm <mathis.marion@grenoble-inp.org>
+Date: Tue, 24 Aug 2021 14:18:49 +0200
+Subject: [PATCH 4/6] Kernel 5.11 compatibility for get_seconds
+
+`get_seconds` disappeared in kernel 5.11 and onwards,
+it is now required to call `ktime_get_real_seconds`.
+
+Signed-off-by: Gwenhael GOAVEC <gwenhael.goavec@femto-st.fr>
+Signed-off-by: Mathis MARION <mathis.marion@grenoble-inp.org>
+---
+ kernel/fa-core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/kernel/fa-core.c b/kernel/fa-core.c
+index 532b0a8..7bc7055 100644
+--- a/kernel/fa-core.c
++++ b/kernel/fa-core.c
+@@ -397,7 +397,11 @@ static void fa_init_timetag(struct fa_dev *fa)
+ {
+ 	unsigned long seconds;
+ 
++#if KERNEL_VERSION(5, 11, 0) <= LINUX_VERSION_CODE
++	seconds = ktime_get_real_seconds();
++#else
+ 	seconds = get_seconds();
++#endif
+ 	fa_writel(fa, fa->fa_utc_base, &zfad_regs[ZFA_UTC_SECONDS_U],
+ 		  (seconds >> 32) & 0xFFFFFFFF);
+ 	fa_writel(fa, fa->fa_utc_base, &zfad_regs[ZFA_UTC_SECONDS_L],
+-- 
+2.30.2
+

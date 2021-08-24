@@ -1,7 +1,7 @@
 From b87ee16bf9b5a31fb3c776f57f5ed313732d0259 Mon Sep 17 00:00:00 2001
 From: marionm <mathis.marion@grenoble-inp.org>
 Date: Fri, 20 Aug 2021 11:49:25 +0200
-Subject: [PATCH 2/3] Kernel 5.8 compatibility for i2c_new_device
+Subject: [PATCH 2/4] Kernel 5.8 compatibility for i2c_new_device
 
 The function `i2c_new_device` disappeared in kernel 5.8.
 It is now required to use `i2c_new_client_device`.

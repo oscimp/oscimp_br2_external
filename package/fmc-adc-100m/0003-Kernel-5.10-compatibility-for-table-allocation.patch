@@ -1,0 +1,62 @@
+From 87feb1f3ea1fbba13d53cd1dbdcdb21f84601a91 Mon Sep 17 00:00:00 2001
+From: marionm <mathis.marion@grenoble-inp.org>
+Date: Tue, 24 Aug 2021 14:17:26 +0200
+Subject: [PATCH 3/6] Kernel 5.10 compatibility for table allocation
+
+The signature for `__sg_alloc_table_from_pages` changed in
+kernel 5.10 and onwards.
+Two agruments are added which can be passed as NULL and 0
+for the same behavior as before, except for error checking,
+which was addressed in this patch.
+
+Signed-off-by: Gwenhael GOAVEC <gwenhael.goavec@femto-st.fr>
+Signed-off-by: Mathis MARION <mathis.marion@grenoble-inp.org>
+---
+ kernel/fa-core.c | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/fa-core.c b/kernel/fa-core.c
+index 8a21683..532b0a8 100644
+--- a/kernel/fa-core.c
++++ b/kernel/fa-core.c
+@@ -39,6 +39,28 @@ static const int zfad_hw_range[] = {
+ struct workqueue_struct *fa_workqueue;
+ 
+ 
++static int fa_sg_alloc_table_from_pages(struct sg_table *sgt,
++						struct page **pages,
++						unsigned int n_pages,
++						unsigned int offset,
++						unsigned long size,
++						unsigned int max_segment,
++						gfp_t gfp_mask)
++{
++#if KERNEL_VERSION(5, 10, 0) <= LINUX_VERSION_CODE
++	struct scatterlist *sg;
++	sg =  __sg_alloc_table_from_pages(sgt, pages, n_pages, offset, size,
++			max_segment, NULL, 0, gfp_mask);
++	if (IS_ERR(sg))
++		return PTR_ERR(sg);
++	else
++		return 0;
++#else
++	return __sg_alloc_table_from_pages(sgt, pages, n_pages, offset, size,
++			max_segment, gfp_mask);
++#endif
++}
++
+ /**
+  * Description:
+  *    The version from the Linux kernel automatically squash contiguous pages.
+@@ -559,7 +581,7 @@ int fa_probe(struct platform_device *pdev)
+ 	case ADC_VER_SPEC:
+ 		fa->memops.read = ioread32;
+ 		fa->memops.write = iowrite32;
+-		fa->sg_alloc_table_from_pages = __sg_alloc_table_from_pages;
++		fa->sg_alloc_table_from_pages = fa_sg_alloc_table_from_pages;
+ 		break;
+ 	case ADC_VER_SVEC:
+ 		fa->memops.read = ioread32be;
+-- 
+2.30.2
+

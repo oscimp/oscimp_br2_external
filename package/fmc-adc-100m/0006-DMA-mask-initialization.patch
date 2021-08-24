@@ -1,0 +1,38 @@
+From 9c74728a7ff72f87e356d4943cdaf800fbe38fbe Mon Sep 17 00:00:00 2001
+From: marionm <mathis.marion@grenoble-inp.org>
+Date: Tue, 24 Aug 2021 14:26:21 +0200
+Subject: [PATCH 6/6] DMA mask initialization
+
+When using the driver, a DMA mask error would occur.
+Pointing the DMA mask to the coherent DMA mask during probing
+and then initializing it fixed the issue.
+
+Signed-off-by: Gwenhael GOAVEC <gwenhael.goavec@femto-st.fr>
+Signed-off-by: Mathis MARION <mathis.marion@grenoble-inp.org>
+---
+ kernel/fa-core.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/kernel/fa-core.c b/kernel/fa-core.c
+index 7bc7055..bf4bd8d 100644
+--- a/kernel/fa-core.c
++++ b/kernel/fa-core.c
+@@ -580,6 +580,15 @@ int fa_probe(struct platform_device *pdev)
+ 	fa->pdev = pdev;
+ 	fa->msgdev = &fa->pdev->dev;
+ 
++	/* DMA Mask initialization */
++	if (!pdev->dev.dma_mask)
++		pdev->dev.dma_mask = &pdev->dev.coherent_dma_mask;
++
++	if (dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64))) {
++		if (dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32)))
++			dev_err(fa->msgdev, "Could not configure DMA mask");
++	}
++
+ 	/* Assign IO operation */
+ 	switch (pdev->id_entry->driver_data) {
+ 	case ADC_VER_SPEC:
+-- 
+2.30.2
+

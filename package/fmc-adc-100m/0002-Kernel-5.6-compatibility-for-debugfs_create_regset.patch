@@ -1,0 +1,40 @@
+From fa93dd0511cc1cfff8fb70f1c90bcb45f489f097 Mon Sep 17 00:00:00 2001
+From: marionm <mathis.marion@grenoble-inp.org>
+Date: Tue, 24 Aug 2021 14:15:05 +0200
+Subject: [PATCH 2/6] Kernel 5.6 compatibility for debugfs_create_regset
+
+The signature for `debugfs_create_regset32` changed from
+returning a `struct dentry *` to `void`.
+Error checking is no longer possible.
+
+Signed-off-by: Gwenhael GOAVEC <gwenhael.goavec@femto-st.fr>
+Signed-off-by: Mathis MARION <mathis.marion@grenoble-inp.org>
+---
+ kernel/fa-debug.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/kernel/fa-debug.c b/kernel/fa-debug.c
+index 7478641..ce7bb09 100644
+--- a/kernel/fa-debug.c
++++ b/kernel/fa-debug.c
+@@ -179,6 +179,9 @@ int fa_debug_init(struct fa_dev *fa)
+ 	fa->dbg_reg32.regs = fa_debugfs_reg32;
+ 	fa->dbg_reg32.nregs = ARRAY_SIZE(fa_debugfs_reg32);
+ 	fa->dbg_reg32.base = fa->fa_top_level;
++#if KERNEL_VERSION(5, 6, 0) <= LINUX_VERSION_CODE
++	debugfs_create_regset32("regs", 0444, fa->dbg_dir, &fa->dbg_reg32);
++#else
+ 	fa->dbg_reg = debugfs_create_regset32("regs", 0200, fa->dbg_dir,
+ 					      &fa->dbg_reg32);
+ 	if (IS_ERR_OR_NULL(fa->dbg_reg)) {
+@@ -187,6 +190,7 @@ int fa_debug_init(struct fa_dev *fa)
+ 			"Cannot create debugfs file \"regs\" (%d)\n",
+ 			 err);
+ 	}
++#endif
+ 
+ 	fa->dbg_reg_spi = debugfs_create_file("spi-regs", 0444,
+ 					      fa->dbg_dir, fa,
+-- 
+2.30.2
+

@@ -1,7 +1,7 @@
 From 820aa9aa99d567a6c0dfb55b038c30631159a227 Mon Sep 17 00:00:00 2001
 From: marionm <mathis.marion@grenoble-inp.org>
 Date: Fri, 20 Aug 2021 11:50:20 +0200
-Subject: [PATCH 3/3] Check for idx=1 as nvmem_name suffix
+Subject: [PATCH 3/4] Check for idx=1 as nvmem_name suffix
 
 During some testing on a 5.11 kernel, I realized that
 the ID was 1 instead of the hardcoded 0.

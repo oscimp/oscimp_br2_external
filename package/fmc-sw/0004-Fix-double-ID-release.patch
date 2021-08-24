@@ -1,0 +1,38 @@
+From 448b4d025d1c61b1d5a186fb385b3d8c8215c76b Mon Sep 17 00:00:00 2001
+From: marionm <mathis.marion@grenoble-inp.org>
+Date: Tue, 24 Aug 2021 14:32:12 +0200
+Subject: [PATCH 4/4] Fix double ID release
+
+The ida_simple_remove() was happening twice: one in the
+fmc_slot_release() function triggered by device_unregister(), and the
+other in the fmc_carrier_del_slot()
+
+Signed-off-by: Gwenhael GOAVEC <gwenhael.goavec@femto-st.fr>
+Signed-off-by: Mathis MARION <mathis.marion@grenoble-inp.org>
+---
+ drivers/fmc/fmc-core.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/drivers/fmc/fmc-core.c b/drivers/fmc/fmc-core.c
+index d2118e0..61fff4f 100644
+--- a/drivers/fmc/fmc-core.c
++++ b/drivers/fmc/fmc-core.c
+@@ -219,15 +219,11 @@ err_ida:
+  */
+ static void fmc_carrier_del_slot(struct fmc_slot *slot)
+ {
+-	int id;
+-
+ 	if (IS_ERR_OR_NULL(slot))
+ 		return;
+ 
+-	id = slot->dev.id;
+ 	fmc_slot_eeprom_del(slot);
+ 	device_unregister(&slot->dev);
+-	ida_simple_remove(&fmc_slot_ida, id);
+ }
+ 
+ /**
+-- 
+2.30.2
+
