@@ -10,7 +10,7 @@ define GENERAL_CORES_PREPARE_KERNEL
 	`# Remove the existing I2C driver if it exists`; \
 	if [ -e $(LINUX_DIR)/drivers/i2c/busses/i2c-ocores.c ]; then \
 		rm -r $(LINUX_DIR)/drivers/i2c/busses/i2c-ocores.c; \
-		sed -i '/^config I2C_OCORES/,/config/{/$$/d}' $(LINUX_DIR)/drivers/i2c/busses/Kconfig; \
+		sed -i '/^config I2C_OCORES/,/^config/{/$$/d}' $(LINUX_DIR)/drivers/i2c/busses/Kconfig; \
 		sed -i '/obj-$$(CONFIG_I2C_OCORES)\t+= i2c-ocores.o/d' $(LINUX_DIR)/drivers/i2c/busses/Makefile; \
 	fi; \
 	\
