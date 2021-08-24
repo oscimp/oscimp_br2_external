@@ -17,9 +17,10 @@ endif
 comment "WRTD drivers"
 
 config BR2_LINUX_KERNEL_EXT_FMC_ADC_100M
-	bool "fmc-adc-100m"
+	bool "fmc-adc-100m driver"
 	select BR2_LINUX_KERNEL_EXT_FMC_SW
 	select BR2_LINUX_KERNEL_EXT_ZIO
+	select BR2_PACKAGE_FMC_ADC_100M
 	help
 	  FmcAdc100M14b4cha is a 4 channel 100MSPS 14 bit ADC low pin count
 	  FPGA Mezzanine Card (VITA 57).
@@ -27,7 +28,8 @@ config BR2_LINUX_KERNEL_EXT_FMC_ADC_100M
 	  https://ohwr.org/project/fmc-adc-100m14b4cha
 
 config BR2_LINUX_KERNEL_EXT_FMC_SW
-	bool "fmc-sw"
+	bool "fmc-sw driver"
+	select BR2_PACKAGE_FMC_SW
 	help
 	  This project aims to provide basic support to FMC modules with respect
 	  to the VITA 57.1 standard.
@@ -35,7 +37,8 @@ config BR2_LINUX_KERNEL_EXT_FMC_SW
 	  https://ohwr.org/project/fmc-sw
 
 config BR2_LINUX_KERNEL_EXT_FPGA_MANAGER
-	bool "fpga-manager"
+	bool "fpga-manager driver"
+	select BR2_PACKAGE_FPGA_MANAGER
 	help
 	  Backport of the FPGA manager provided by the Linux kernel
 	  /!\ This will erase the existing FPGA manager driver from
@@ -44,7 +47,8 @@ config BR2_LINUX_KERNEL_EXT_FPGA_MANAGER
 	  https://gitlab.cern.ch/coht/fpga-manager
 
 config BR2_LINUX_KERNEL_EXT_GENERAL_CORES
-	bool "general-cores"
+	bool "general-cores drivers"
+	select BR2_PACKAGE_GENERAL_CORES
 	help
 	  A collection of platform-independent cores such as memories,
 	  synchronizer circuits and Wishbone cores.
@@ -54,13 +58,22 @@ config BR2_LINUX_KERNEL_EXT_GENERAL_CORES
 
 	  https://ohwr.org/project/general-cores
 
+comment "mock-turtle needs host python3"
+	depends on !BR2_PACKAGE_HOST_PYTHON3
+
 comment "mock-turtle needs lua 5.1"
 	depends on !BR2_PACKAGE_LUA_5_1
 
+comment "mock-turtle needs python3"
+	depends on !BR2_PACKAGE_PYTHON3
+
 config BR2_LINUX_KERNEL_EXT_MOCK_TURTLE
-	bool "mock-turtle"
+	bool "mock-turtle driver"
+	depends on BR2_PACKAGE_HOST_PYTHON3
 	depends on BR2_PACKAGE_LUA_5_1
+	depends on BR2_PACKAGE_PYTHON3
 	select BR2_PACKAGE_HOST_WISHBONE_GEN
+	select BR2_PACKAGE_MOCK_TURTLE
 	help
 	  Mock Turtle is an HDL core of a generic control system node,
 	  based on a deterministic multicore CPU architecture.
@@ -71,37 +84,48 @@ comment "spec needs host python3"
 	depends on !BR2_PACKAGE_HOST_PYTHON3
 
 config BR2_LINUX_KERNEL_EXT_SPEC
-	bool "spec"
+	bool "spec drivers"
 	depends on BR2_PACKAGE_HOST_PYTHON3
 	select BR2_LINUX_KERNEL_EXT_FMC_SW
 	select BR2_LINUX_KERNEL_EXT_FPGA_MANAGER
 	select BR2_LINUX_KERNEL_EXT_GENERAL_CORES
 	select BR2_PACKAGE_HOST_CHEBY
+	select BR2_PACKAGE_SPEC
 	help
 	  A simple 4-lane PCIe carrier for a low pin count FPGA Mezzanine Card (VITA 57).
 
 	  https://ohwr.org/project/spec
 
-config BR2_LINUX_KERNEL_EXT_ZIO
-	bool "zio"
-	help
-	  A software framework for Linux device drivers aimed at
-	  supporting controls and data acquisition hardware.
-
-	  https://ohwr.org/project/zio
+comment "wrtd needs host python 3"
+	depends on !BR2_PACKAGE_HOST_PYTHON3
 
 comment "wrtd needs lua 5.1"
 	depends on !BR2_PACKAGE_LUA_5_1
 
+comment "wrtd needs python 3"
+	depends on !BR2_PACKAGE_PYTHON3
+
 config BR2_LINUX_KERNEL_EXT_WRTD
-	bool "wrtd"
+	bool "wrtd drivers"
+	depends on BR2_PACKAGE_HOST_PYTHON3
 	depends on BR2_PACKAGE_LUA_5_1
+	depends on BR2_PACKAGE_PYTHON3
 	select BR2_LINUX_KERNEL_EXT_MOCK_TURTLE
+	select BR2_PACKAGE_WRTD
 	help
 	  White Rabbit Trigger Distribution (WRTD) is a generic
 	  framework  for distributing triggers (events) between
 	  Nodes over a White Rabbit network.
 
 	  https://ohwr.org/project/wrtd
+
+config BR2_LINUX_KERNEL_EXT_ZIO
+	bool "zio drivers"
+	select BR2_PACKAGE_ZIO
+	help
+	  A software framework for Linux device drivers aimed at
+	  supporting controls and data acquisition hardware.
+
+	  https://ohwr.org/project/zio
 
 comment "WRTD drivers end"

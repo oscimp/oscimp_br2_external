@@ -4,7 +4,6 @@ comment "spec userspace needs host python3"
 config BR2_PACKAGE_SPEC
 	bool "spec userspace"
 	depends on BR2_PACKAGE_HOST_PYTHON3
-	select BR2_LINUX_KERNEL_EXT_SPEC
 	help
 	  A simple 4-lane PCIe carrier for a low pin count FPGA Mezzanine Card (VITA 57).
 

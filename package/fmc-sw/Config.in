@@ -1,6 +1,5 @@
 config BR2_PACKAGE_FMC_SW
 	bool "fmc-sw userspace"
-	select BR2_LINUX_KERNEL_EXT_FMC_SW
 	help
 	  This project aims to provide basic support to FMC modules with respect
 	  to the VITA 57.1 standard.

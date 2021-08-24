@@ -1,6 +1,5 @@
 config BR2_PACKAGE_GENERAL_CORES
 	bool "general-cores userspace"
-	select BR2_LINUX_KERNEL_EXT_GENERAL_CORES
 	help
 	  A collection of platform-independent cores such as memories,
 	  synchronizer circuits and Wishbone cores.
