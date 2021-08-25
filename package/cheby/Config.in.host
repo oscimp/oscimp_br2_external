@@ -5,7 +5,7 @@ config BR2_PACKAGE_HOST_CHEBY
 	bool "host cheby"
 	depends on BR2_PACKAGE_PYTHON3
 	select BR2_PACKAGE_HOST_PYTHON3_SETUPTOOLS
-	select BR2_PACKAGE_HOST_PYTHON3_PYYAML
+	select BR2_PACKAGE_HOST_PYTHON_PYYAML
 	help
 	  The Cheby project aims at defining a file format to describe the HW/SW
 	  interface (the memory map), and a set of tools to generate HDL, drivers,

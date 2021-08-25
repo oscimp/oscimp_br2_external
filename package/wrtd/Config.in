@@ -14,8 +14,8 @@ config BR2_PACKAGE_WRTD
 	depends on BR2_PACKAGE_PYTHON3
 	select BR2_PACKAGE_HOST_PYTHON3_SETUPTOOLS
 	select BR2_PACKAGE_MOCK_TURTLE
-	select BR2_PACKAGE_PYTHON3_DECORATOR
-	select BR2_PACKAGE_PYTHON3_PYYAML
+	select BR2_PACKAGE_PYTHON_DECORATOR
+	select BR2_PACKAGE_PYTHON_PYYAML
 	help
 	  White Rabbit Trigger Distribution (WRTD) is a generic
 	  framework  for distributing triggers (events) between
