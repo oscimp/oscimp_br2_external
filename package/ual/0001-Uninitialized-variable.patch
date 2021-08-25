@@ -1,0 +1,26 @@
+From 00d197e9d6042f58b1a98cde74855789b35c6982 Mon Sep 17 00:00:00 2001
+From: marionm <mathis.marion@grenoble-inp.org>
+Date: Wed, 25 Aug 2021 11:33:36 +0200
+Subject: [PATCH] Uninitialized variable
+
+---
+ tools/ualmem.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tools/ualmem.c b/tools/ualmem.c
+index 172b77c..0e438fe 100644
+--- a/tools/ualmem.c
++++ b/tools/ualmem.c
+@@ -110,7 +110,8 @@ int main(int argc, char **argv)
+ {
+ 	struct ual_bar_tkn *ubar;
+ 	uint64_t address = 0, flags = 0, offset = 0, dw = UAL_DATA_WIDTH_32;
+-	uint64_t *val, size, ret;
++	uint64_t *val = NULL;
++	uint64_t size, ret;
+ 	unsigned int num = 1, num_val = 0, off = 0;
+ 	int c, i, option_index = 0, val_idx = 0;
+ 	struct ual_desc_pci pci;
+-- 
+2.30.2
+

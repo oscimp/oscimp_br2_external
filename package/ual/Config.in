@@ -1,0 +1,9 @@
+config BR2_PACKAGE_UAL
+	bool "ual"
+	help
+	  The Universal Access Librasy (also known as UAL) is a userspace
+	  library whose aim is to make transparent the acess to physical
+	  busses.
+
+	  https://gitlab.cern.ch/cohtdrivers/ual
+
