@@ -61,18 +61,13 @@ config BR2_LINUX_KERNEL_EXT_GENERAL_CORES
 comment "mock-turtle needs host python3"
 	depends on !BR2_PACKAGE_HOST_PYTHON3
 
-comment "mock-turtle needs lua 5.1"
-	depends on !BR2_PACKAGE_LUA_5_1
-
 comment "mock-turtle needs python3"
 	depends on !BR2_PACKAGE_PYTHON3
 
 config BR2_LINUX_KERNEL_EXT_MOCK_TURTLE
 	bool "mock-turtle driver"
 	depends on BR2_PACKAGE_HOST_PYTHON3
-	depends on BR2_PACKAGE_LUA_5_1
 	depends on BR2_PACKAGE_PYTHON3
-	select BR2_PACKAGE_HOST_WISHBONE_GEN
 	select BR2_PACKAGE_MOCK_TURTLE
 	help
 	  Mock Turtle is an HDL core of a generic control system node,
