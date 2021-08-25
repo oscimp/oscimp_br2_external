@@ -84,7 +84,6 @@ config BR2_LINUX_KERNEL_EXT_SPEC
 	select BR2_LINUX_KERNEL_EXT_FMC_SW
 	select BR2_LINUX_KERNEL_EXT_FPGA_MANAGER
 	select BR2_LINUX_KERNEL_EXT_GENERAL_CORES
-	select BR2_PACKAGE_HOST_CHEBY
 	select BR2_PACKAGE_SPEC
 	help
 	  A simple 4-lane PCIe carrier for a low pin count FPGA Mezzanine Card (VITA 57).

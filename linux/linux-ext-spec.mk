@@ -7,12 +7,6 @@
 LINUX_EXTENSIONS += spec
 
 define SPEC_PREPARE_KERNEL
-	if [ ! -e $(HOST_DIR)/usr/bin/cheby ]; then \
-		echo 'Please install manually cheby by running "make host-cheby"'; \
-		exit 1; \
-	fi
-	$(HOST_DIR)/usr/bin/cheby --gen-c -i $(SPEC_DIR)/hdl/rtl/spec_base_regs.cheby > $(SPEC_DIR)/software/kernel/spec-core-fpga.h
-
 	`# Create destination directory`; \
 	DEST_DIR=$(LINUX_DIR)/drivers/wrtd_ref_spec150t_adc; \
 	mkdir -p $${DEST_DIR}; \
