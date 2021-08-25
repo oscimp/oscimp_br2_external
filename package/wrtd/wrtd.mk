@@ -41,12 +41,14 @@ define WRTD_INSTALL_TARGET_CMDS
 	( \
 		cd $(@D)/software/lib/python; \
 		PYTHONPATH=$(TARGET_DIR)/usr/lib/$(WRTD_PYTHON_DIR)/site-packages \
+		PYTHONPATH+=:$(HOST_DIR)/usr/lib/$(WRTD_PYTHON_DIR)/site-packages \
 		$(HOST_DIR)/bin/python3 setup.py install \
 			--prefix=$(TARGET_DIR)/usr \
 	)
 	( \
 		cd $(@D)/software/tools; \
 		PYTHONPATH=$(TARGET_DIR)/usr/lib/$(WRTD_PYTHON_DIR)/site-packages \
+		PYTHONPATH+=:$(HOST_DIR)/usr/lib/$(WRTD_PYTHON_DIR)/site-packages \
 		$(HOST_DIR)/bin/python3 setup.py install \
 			--prefix=$(TARGET_DIR)/usr \
 	)
