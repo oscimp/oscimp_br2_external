@@ -10,6 +10,12 @@ ZIO_SITE_METHOD = git
 
 ZIO_INSTALL_STAGING = YES
 
+define ZIO_CONFIGURE_CMDS
+	$(SED) 's/ZIO_MAJOR_VERSION=.*$$/ZIO_MAJOR_VERSION=1/g' $(@D)/tools/Makefile
+	$(SED) 's/ZIO_MINOR_VERSION=.*$$/ZIO_MINOR_VERSION=4/g' $(@D)/tools/Makefile
+	$(SED) 's/ZIO_PATCH_VERSION=.*$$/ZIO_PATCH_VERSION=2/g' $(@D)/tools/Makefile
+endef
+
 define ZIO_BUILD_CMDS
 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
 		-C $(@D) tools
