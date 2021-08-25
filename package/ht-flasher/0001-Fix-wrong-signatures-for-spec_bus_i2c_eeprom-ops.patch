@@ -1,0 +1,52 @@
+From 4b6b176320060fd80f11285b78d864a3ffd91508 Mon Sep 17 00:00:00 2001
+From: Mathis MARION <mathis.marion@grenoble-inp.org>
+Date: Thu, 29 Jul 2021 11:19:02 +0200
+Subject: [PATCH] Fix wrong signatures for spec_bus_i2c_eeprom ops
+
+---
+ src/i2c_spec.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/i2c_spec.c b/src/i2c_spec.c
+index 7b08801..35ef706 100644
+--- a/src/i2c_spec.c
++++ b/src/i2c_spec.c
+@@ -323,7 +323,7 @@ static struct i2c_bus_t *spec_i2c = &spec_bus_i2c_eeprom;
+ static int do_read = 0;
+ static int do_write = 0;
+ 
+-static int spec_eeprom_init(struct arglist_t *args)
++static int spec_eeprom_init(struct algo_t *self, struct arglist_t *args)
+ {
+ 	if (spec_i2c->init(spec_i2c, args) < 0)
+ 		return -1;
+@@ -344,7 +344,7 @@ static int spec_eeprom_init(struct arglist_t *args)
+ 	return 0;
+ }
+ 
+-static void spec_eeprom_help(struct arglist_t *args)
++static void spec_eeprom_help(struct algo_t *self)
+ {
+ 	flasher_report("Programs SPEC GN4124 configuration EEPROM with a binary file.\n");
+ 	flasher_report("\nUsage: ht-flasher [-r] <filename.bin>\n");
+@@ -355,7 +355,7 @@ static int max(int a, int b)
+ 	return a > b ? a : b;
+ }
+ 
+-static int spec_eeprom_run()
++static int spec_eeprom_run(struct algo_t *self)
+ {
+ 	uint8_t buf[129], buf_rdbk[129];
+ 	int i;
+@@ -449,7 +449,7 @@ static int spec_eeprom_run()
+ 	return 0;
+ }
+ 
+-static int spec_eeprom_release()
++static int spec_eeprom_release(struct algo_t *self)
+ {
+ 	spec_i2c->release(spec_i2c);
+ 	return 0;
+-- 
+2.27.0
+

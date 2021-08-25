@@ -1,0 +1,8 @@
+config BR2_PACKAGE_HT_FLASHER
+	bool "ht-flasher"
+	select BR2_PACKAGE_UAL
+	help
+	  Flasher for a variety of BE-CO-HT cards (SVEC, SPEC, CTRVD, CTRFMC)
+
+	  https://gitlab.cern.ch/coht/ht-flasher
+
