@@ -7,6 +7,10 @@
 LINUX_EXTENSIONS += mock-turtle
 
 define MOCK_TURTLE_PREPARE_KERNEL
+	if [ ! -e $(HOST_DIR)/usr/bin/wbgen2 ]; then \
+		echo 'Please install manually wbgen2 by running "make host-wishbone-gen"'; \
+		exit 1; \
+	fi
 	$(HOST_DIR)/usr/bin/wbgen2 -s defines -C $(MOCK_TURTLE_DIR)/software/include/mockturtle/hw/mockturtle_cpu_csr.h $(MOCK_TURTLE_DIR)/hdl/rtl/cpu/mt_cpu_csr.wb
 	$(HOST_DIR)/usr/bin/wbgen2 -s defines -C $(MOCK_TURTLE_DIR)/software/include/mockturtle/hw/mockturtle_cpu_lr.h $(MOCK_TURTLE_DIR)/hdl/rtl/cpu/mt_cpu_lr.wb
 
