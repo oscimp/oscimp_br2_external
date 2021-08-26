@@ -67,12 +67,8 @@ config BR2_LINUX_KERNEL_EXT_MOCK_TURTLE
 
 	  https://ohwr.org/project/mock-turtle
 
-comment "spec needs host python3"
-	depends on !BR2_PACKAGE_HOST_PYTHON3
-
 config BR2_LINUX_KERNEL_EXT_SPEC
 	bool "spec drivers"
-	depends on BR2_PACKAGE_HOST_PYTHON3
 	select BR2_LINUX_KERNEL_EXT_FMC_SW
 	select BR2_LINUX_KERNEL_EXT_FPGA_MANAGER
 	select BR2_LINUX_KERNEL_EXT_GENERAL_CORES
