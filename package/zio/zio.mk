@@ -8,9 +8,9 @@ ZIO_VERSION = v1.4.2
 ZIO_SITE = https://ohwr.org/project/zio
 ZIO_SITE_METHOD = git
 
-ZIO_INSTALL_STAGING = YES
-
 ifeq ($(BR2_PACKAGE_ZIO_USERSPACE),y)
+
+ZIO_INSTALL_STAGING = YES
 
 define ZIO_CONFIGURE_CMDS
 	$(SED) 's/ZIO_MAJOR_VERSION=.*$$/ZIO_MAJOR_VERSION=1/g' $(@D)/tools/Makefile

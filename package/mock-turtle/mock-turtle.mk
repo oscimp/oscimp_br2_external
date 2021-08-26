@@ -8,6 +8,8 @@ MOCK_TURTLE_VERSION = v4.0.4
 MOCK_TURTLE_SITE = https://ohwr.org/project/mock-turtle
 MOCK_TURTLE_SITE_METHOD = git
 
+ifeq ($(BR2_PACKAGE_MOCK_TURTLE_USERSPACE),y)
+
 MOCK_TURTLE_INSTALL_STAGING = YES
 
 MOCK_TURTLE_DEPENDENCIES += host-python3 python3
@@ -43,5 +45,7 @@ define MOCK_TURTLE_INSTALL_TARGET_CMDS
 			--prefix=$(TARGET_DIR)/usr \
 	)	
 endef
+
+endif
 
 $(eval $(generic-package))
