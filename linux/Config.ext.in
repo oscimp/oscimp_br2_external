@@ -93,16 +93,12 @@ config BR2_LINUX_KERNEL_EXT_SPEC
 comment "wrtd needs host python 3"
 	depends on !BR2_PACKAGE_HOST_PYTHON3
 
-comment "wrtd needs lua 5.1"
-	depends on !BR2_PACKAGE_LUA_5_1
-
 comment "wrtd needs python 3"
 	depends on !BR2_PACKAGE_PYTHON3
 
 config BR2_LINUX_KERNEL_EXT_WRTD
 	bool "wrtd drivers"
 	depends on BR2_PACKAGE_HOST_PYTHON3
-	depends on BR2_PACKAGE_LUA_5_1
 	depends on BR2_PACKAGE_PYTHON3
 	select BR2_LINUX_KERNEL_EXT_MOCK_TURTLE
 	select BR2_PACKAGE_WRTD

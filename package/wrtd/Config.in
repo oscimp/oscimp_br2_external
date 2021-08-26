@@ -1,16 +1,12 @@
 comment "wrtd needs host python3"
 	depends on !BR2_PACKAGE_HOST_PYTHON3
 
-comment "wrtd needs lua 5.1"
-	depends on !BR2_PACKAGE_LUA_5_1
-
 comment "wrtd needs python3"
 	depends on !BR2_PACKAGE_PYTHON3
 
 config BR2_PACKAGE_WRTD
 	bool "wrtd userspace"
 	depends on BR2_PACKAGE_HOST_PYTHON3
-	depends on BR2_PACKAGE_LUA_5_1
 	depends on BR2_PACKAGE_PYTHON3
 	select BR2_PACKAGE_HOST_PYTHON3_SETUPTOOLS
 	select BR2_PACKAGE_MOCK_TURTLE
