@@ -10,6 +10,8 @@ ZIO_SITE_METHOD = git
 
 ZIO_INSTALL_STAGING = YES
 
+ifeq ($(BR2_PACKAGE_ZIO_USERSPACE),y)
+
 define ZIO_CONFIGURE_CMDS
 	$(SED) 's/ZIO_MAJOR_VERSION=.*$$/ZIO_MAJOR_VERSION=1/g' $(@D)/tools/Makefile
 	$(SED) 's/ZIO_MINOR_VERSION=.*$$/ZIO_MINOR_VERSION=4/g' $(@D)/tools/Makefile
@@ -30,8 +32,10 @@ define ZIO_INSTALL_TARGET_CMDS
 	$(INSTALL) -D \
 		$(@D)/tools/zio-dump \
 		$(@D)/tools/zio-cat-file \
-	       	$(@D)/tools/test-dtc \
+       		$(@D)/tools/test-dtc \
 		$(TARGET_DIR)/usr/bin
 endef
+
+endif
 
 $(eval $(generic-package))
