@@ -1,5 +1,5 @@
 config BR2_PACKAGE_GENERAL_CORES
-	bool "general-cores userspace"
+	bool
 	help
 	  A collection of platform-independent cores such as memories,
 	  synchronizer circuits and Wishbone cores.
