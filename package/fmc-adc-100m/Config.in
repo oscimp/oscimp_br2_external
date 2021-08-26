@@ -1,7 +1,17 @@
 config BR2_PACKAGE_FMC_ADC_100M
-	bool "fmc-adc-100m userspace"
+	bool
 	select BR2_PACKAGE_FMC_SW
 	select BR2_PACKAGE_ZIO
+	help
+	  FmcAdc100M14b4cha is a 4 channel 100MSPS 14 bit ADC low pin count
+	  FPGA Mezzanine Card (VITA 57).
+
+	  https://ohwr.org/project/fmc-adc-100m14b4cha
+
+config BR2_PACKAGE_FMC_ADC_100M_USERSPACE
+	bool "fmc-adc-100m userspace"
+	select BR2_LINUX_KERNEL_EXT_FMC_ADC_100M
+	select BR2_PACKAGE_ZIO_USERSPACE
 	help
 	  FmcAdc100M14b4cha is a 4 channel 100MSPS 14 bit ADC low pin count
 	  FPGA Mezzanine Card (VITA 57).
