@@ -8,15 +8,13 @@ WRTD_VERSION = 14547314d1b50ce221b62c8289170ec2ddab3c69
 WRTD_SITE = https://ohwr.org/project/wrtd
 WRTD_SITE_METHOD = git
 
-WRTD_DEPENDENCIES += mock-turtle
-
-ifeq ($(BR2_PACKAGE_WRTD_USERSPACE),y)
+WRTD_DEPENDENCIES += host-python3 host-python3-setuptools mock-turtle python3 python-decorator python-setuptools python-pyyaml
 
 WRTD_INSTALL_STAGING = YES
 
-WRTD_DEPENDENCIES += host-python3 host-python3-setuptools python3 python-decorator python-setuptools python-pyyaml
-
 WRTD_PYTHON_DIR = python$(PYTHON3_VERSION_MAJOR)
+
+WRTD_MODULE_SUBDIRS = software/drivers
 
 define WRTD_BUILD_CMDS
 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
@@ -53,6 +51,5 @@ define WRTD_INSTALL_TARGET_CMDS
 	)
 endef
 
-endif
-
+$(eval $(kernel-module))
 $(eval $(generic-package))

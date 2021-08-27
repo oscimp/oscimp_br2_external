@@ -1,13 +1,3 @@
-config BR2_PACKAGE_WRTD
-	bool
-	select BR2_PACKAGE_MOCK_TURTLE
-	help
-	  White Rabbit Trigger Distribution (WRTD) is a generic
-	  framework  for distributing triggers (events) between
-	  Nodes over a White Rabbit network.
-
-	  https://ohwr.org/project/wrtd
-
 comment "wrtd userspace needs host python3"
 	depends on !BR2_PACKAGE_HOST_PYTHON3
 
@@ -15,11 +5,10 @@ comment "wrtd userspace needs python3"
 	depends on !BR2_PACKAGE_PYTHON3
 
 config BR2_PACKAGE_WRTD_USERSPACE
-	bool "wrtd userspace"
+	bool "wrtd"
 	depends on BR2_PACKAGE_HOST_PYTHON3
 	depends on BR2_PACKAGE_PYTHON3
-	select BR2_LINUX_KERNEL_EXT_WRTD
-	select BR2_PACKAGE_MOCK_TURTLE_USERSPACE
+	select BR2_PACKAGE_MOCK_TURTLE
 	select BR2_PACKAGE_PYTHON_DECORATOR
 	select BR2_PACKAGE_PYTHON_SETUPTOOLS
 	select BR2_PACKAGE_PYTHON_PYYAML

@@ -58,15 +58,6 @@ config BR2_LINUX_KERNEL_EXT_GENERAL_CORES
 
 	  https://ohwr.org/project/general-cores
 
-config BR2_LINUX_KERNEL_EXT_MOCK_TURTLE
-	bool "mock-turtle driver"
-	select BR2_PACKAGE_MOCK_TURTLE
-	help
-	  Mock Turtle is an HDL core of a generic control system node,
-	  based on a deterministic multicore CPU architecture.
-
-	  https://ohwr.org/project/mock-turtle
-
 config BR2_LINUX_KERNEL_EXT_SPEC
 	bool "spec drivers"
 	select BR2_LINUX_KERNEL_EXT_FMC_SW
@@ -77,17 +68,6 @@ config BR2_LINUX_KERNEL_EXT_SPEC
 	  A simple 4-lane PCIe carrier for a low pin count FPGA Mezzanine Card (VITA 57).
 
 	  https://ohwr.org/project/spec
-
-config BR2_LINUX_KERNEL_EXT_WRTD
-	bool "wrtd drivers"
-	select BR2_LINUX_KERNEL_EXT_MOCK_TURTLE
-	select BR2_PACKAGE_WRTD
-	help
-	  White Rabbit Trigger Distribution (WRTD) is a generic
-	  framework  for distributing triggers (events) between
-	  Nodes over a White Rabbit network.
-
-	  https://ohwr.org/project/wrtd
 
 config BR2_LINUX_KERNEL_EXT_ZIO
 	bool "zio drivers"
