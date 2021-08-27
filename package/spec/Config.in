@@ -1,5 +1,5 @@
 config BR2_PACKAGE_SPEC
-	bool
+	bool "spec"
 	select BR2_PACKAGE_FMC_SW
 	select BR2_PACKAGE_FPGA_MANAGER
 	select BR2_PACKAGE_GENERAL_CORES
