@@ -1,5 +1,5 @@
 config BR2_PACKAGE_FPGA_MANAGER
-	bool
+	bool "fpga-manager"
 	help
 	  Backport of the FPGA manager provided by the Linux kernel
 
