@@ -1,8 +1,0 @@
-config BR2_PACKAGE_FMC_SW
-	bool "fmc-sw"
-	help
-	  This project aims to provide basic support to FMC modules with respect
-	  to the VITA 57.1 standard.
-
-	  https://ohwr.org/project/fmc-sw
-

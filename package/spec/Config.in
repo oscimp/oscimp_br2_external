@@ -1,9 +1,0 @@
-config BR2_PACKAGE_SPEC
-	bool "spec"
-	select BR2_PACKAGE_FMC_SW
-	select BR2_PACKAGE_FPGA_MANAGER
-	select BR2_PACKAGE_GENERAL_CORES
-	help
-	  A simple 4-lane PCIe carrier for a low pin count FPGA Mezzanine Card (VITA 57).
-
-	  https://ohwr.org/project/spec
