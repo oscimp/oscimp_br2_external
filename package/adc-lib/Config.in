@@ -8,7 +8,7 @@ config BR2_PACKAGE_ADC_LIB
 	bool "adc-lib"
 	depends on BR2_PACKAGE_HOST_PYTHON3
 	depends on BR2_PACKAGE_PYTHON3
-	select BR2_PACKAGE_FMC_ADC_100M_USERSPACE
+	select BR2_PACKAGE_FMC_ADC_100M
 	help
 	  This library provides a generic API for ADC devices, so that applications
 	  can use this API to access any of the supported ADC boards.
