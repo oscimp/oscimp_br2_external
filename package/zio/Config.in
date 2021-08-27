@@ -1,14 +1,5 @@
 config BR2_PACKAGE_ZIO
-	bool
-	help
-	  A software framework for Linux device drivers aimed at
-	  supporting controls and data acquisition hardware.
-
-	  https://ohwr.org/project/zio
-
-config BR2_PACKAGE_ZIO_USERSPACE
-	bool "zio userspace"
-	select BR2_LINUX_KERNEL_EXT_ZIO
+	bool "zio"
 	help
 	  A software framework for Linux device drivers aimed at
 	  supporting controls and data acquisition hardware.

@@ -8,9 +8,12 @@ ZIO_VERSION = v1.4.2
 ZIO_SITE = https://ohwr.org/project/zio
 ZIO_SITE_METHOD = git
 
-ifeq ($(BR2_PACKAGE_ZIO_USERSPACE),y)
-
 ZIO_INSTALL_STAGING = YES
+
+ZIO_MODULE_SUBDIRS = drivers/zio
+ZIO_MODULE_MAKE_OPTS = ZIO_VERSION="-D__ZIO_MAJOR_VERSION=1"
+ZIO_MODULE_MAKE_OPTS += ZIO_VERSION+="-D__ZIO_MINOR_VERSION=4"
+ZIO_MODULE_MAKE_OPTS += ZIO_VERSION+="-D__ZIO_PATCH_VERSION=2"
 
 define ZIO_CONFIGURE_CMDS
 	$(SED) 's/ZIO_MAJOR_VERSION=.*$$/ZIO_MAJOR_VERSION=1/g' $(@D)/tools/Makefile
@@ -36,6 +39,5 @@ define ZIO_INSTALL_TARGET_CMDS
 		$(TARGET_DIR)/usr/bin
 endef
 
-endif
-
+$(eval $(kernel-module))
 $(eval $(generic-package))
