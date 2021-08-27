@@ -7,6 +7,8 @@
 LINUX_EXTENSIONS += spec
 
 define SPEC_PREPARE_KERNEL
+	$(SED) 's/$$(CONFIG_FPGA_MGR_BACKPORT)/y/g' $(SPEC_DIR)/software/kernel/Kbuild
+
 	`# Create destination directory`; \
 	DEST_DIR=$(LINUX_DIR)/drivers/wrtd_ref_spec150t_adc; \
 	mkdir -p $${DEST_DIR}; \
