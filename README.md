@@ -18,9 +18,9 @@ Adding support for these packages requires sourcing the **sourceme.ggm** file (`
 to add the **BR2_EXTERNAL** variable definition (alternatively, one might want to add <code>export
 BR2_EXTERNAL=/somewhere/oscimp_br2_external</code> to the *.bashrc* initialization file).
 
-For compiling ``gnss-sdr`` using this Buildroot package definition, make sure to apply the patch *prior* to configuring Buildroot: from the root Buildroot directory,
+For compiling ``gr-osmodrr`` with XTRX support, make sure to apply the patch *prior* to configuring Buildroot: from the root Buildroot directory,
 ```bash
-patch -p1 < armadilloLapackUhdOnGnuradio.patch
+patch -p1 < gr-osmosdr-add_xtrx_support.patch
 ```
 
 Configuring Buildroot with GNU Radio support is achieved by running from the Buildroot root directory  
