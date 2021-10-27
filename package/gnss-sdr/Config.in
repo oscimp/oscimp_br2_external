@@ -4,8 +4,6 @@ comment "gnss-sdr needs a toolchain w/ C++, fortran, NPTL, wchar, dynamic librar
 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
 comment "gnss-sdr needs python3, gnuradio and armadillo"
 	depends on !(BR2_PACKAGE_PYTHON3 && BR2_PACKAGE_GNURADIO && BR2_PACKAGE_ARMADILLO)
-comment "gnss-sdr can't work with clapack"
-	depends on BR2_PACKAGE_CLAPACK
 
 config BR2_PACKAGE_GNSS_SDR
 	bool "gnss-sdr"
