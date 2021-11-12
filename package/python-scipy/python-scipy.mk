@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-PYTHON_SCIPY_VERSION = 1.7.2
+PYTHON_SCIPY_VERSION = 1.6.1
 PYTHON_SCIPY_SOURCE = v$(PYTHON_SCIPY_VERSION).tar.gz
 PYTHON_SCIPY_SITE = https://github.com/scipy/scipy/archive
 PYTHON_SCIPY_LICENSE = BSD-3-Clause
