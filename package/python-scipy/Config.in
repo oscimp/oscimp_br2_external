@@ -1,0 +1,45 @@
+comment "python-scipy needs a toolchain w/ fortran"
+	depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
+	depends on !BR2_TOOLCHAIN_HAS_FORTRAN
+
+comment "python-scipy needs lib openblas or lapack"
+	  depends on !BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS && !BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
+
+comment "python-scipy needs python-numpy"
+	depends on !BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+
+comment "python-scipy needs a toolchain w/ C++, wchar" # pybind11 with python
+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+
+config BR2_PACKAGE_PYTHON_SCIPY
+	bool "python-scipy"
+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
+	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS || \
+		(BR2_PACKAGE_LAPACK_ARCH_SUPPORTS && BR2_TOOLCHAIN_HAS_FORTRAN)
+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
+	select BR2_PACKAGE_PYBIND11_WITH_PYTHON
+	select BR2_PACKAGE_PYTHON_NUMPY # runtime
+	help
+	  Scipy is a Python package that includes modules for
+	  statistics, optimization, linear algebra and much
+	  more.
+
+	  http://www.scipy.org/
+
+if BR2_PACKAGE_PYTHON_SCIPY
+
+choice
+	prompt "BLAS implementation"
+
+config BR2_PACKAGE_PYTHON_SCIPY_OPENBLAS
+    bool "openblas"
+	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
+    select BR2_PACKAGE_OPENBLAS
+
+config BR2_PACKAGE_PYTHON_SCIPY_LAPACK
+    bool "lapack"
+    depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
+    select BR2_PACKAGE_LAPACK
+
+endchoice
+endif
