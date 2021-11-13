@@ -4,4 +4,5 @@ config BR2_PACKAGE_PYTHON_PYTHRAN
 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
 	select BR2_PACKAGE_PYTHON_NUMPY # runtime
 	help
-	  TODO
+	  Pythran s an ahead of time compiler for a subset of the Python language, 
+      with a focus on scientific computing. 
