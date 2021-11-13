@@ -1,4 +1,5 @@
 config BR2_PACKAGE_PYTHON_BENIGET
 	bool "python-beniget"
 	help
-	  TODO
+	  Beniget is a collection of Compile-time analyse on Python Abstract Syntax Tree(AST). 
+      It's a building block to write static analyzer or compiler for Python. 
