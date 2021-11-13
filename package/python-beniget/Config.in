@@ -1,0 +1,4 @@
+config BR2_PACKAGE_PYTHON_BENIGET
+	bool "python-beniget"
+	help
+	  TODO

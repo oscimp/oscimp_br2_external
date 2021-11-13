@@ -19,6 +19,7 @@ config BR2_PACKAGE_PYTHON_SCIPY
 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
 	select BR2_PACKAGE_PYBIND11_WITH_PYTHON
 	select BR2_PACKAGE_PYTHON_NUMPY # runtime
+	select BR2_PACKAGE_BOOST_PYTHON
 	help
 	  Scipy is a Python package that includes modules for
 	  statistics, optimization, linear algebra and much
