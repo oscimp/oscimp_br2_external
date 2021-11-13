@@ -4,5 +4,5 @@ config BR2_PACKAGE_PYTHON_PYEXT
 	  python-pyext is a set of extensions to enhance python.
 	  This includes features such as function overloading,
 	  the 'switch' statement, python2 safe tuple unpacking..
-	  
-	  https://pypi.org/project/pyext/ 
+
+	  https://pypi.org/project/pyext/

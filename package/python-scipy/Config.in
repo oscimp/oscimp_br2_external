@@ -35,14 +35,14 @@ choice
 	prompt "BLAS implementation"
 
 config BR2_PACKAGE_PYTHON_SCIPY_OPENBLAS
-    bool "openblas"
+	bool "openblas"
 	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
-    select BR2_PACKAGE_OPENBLAS
+	select BR2_PACKAGE_OPENBLAS
 
 config BR2_PACKAGE_PYTHON_SCIPY_LAPACK
-    bool "lapack"
-    depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
-    select BR2_PACKAGE_LAPACK
+	bool "lapack"
+	depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
+	select BR2_PACKAGE_LAPACK
 
 endchoice
 endif

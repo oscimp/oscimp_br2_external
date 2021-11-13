@@ -13,12 +13,12 @@ PYTHON_SCIPY_LICENSE_FILES = LICENSE.txt doc/sphinxext/LICENSE.txt \
 PYTHON_SCIPY_SETUP_TYPE = setuptools
 
 PYTHON_SCIPY_DEPENDENCIES = host-python-numpy \
-    host-pybind11 \
-    boost \
-    host-python-pythran \
-    host-python-gast \
-    host-python-beniget \
-    host-python-ply
+	host-pybind11 \
+	boost \
+	host-python-pythran \
+	host-python-gast \
+	host-python-beniget \
+	host-python-ply
 
 # blas support may be provided by lapack (libblas.a) or openblas (libopenblas.a)
 ifeq ($(BR2_PACKAGE_PYTHON_SCIPY_OPENBLAS),y)
