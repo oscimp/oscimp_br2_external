@@ -1,0 +1,9 @@
+config BR2_PACKAGE_PYTHONDATA_SOFTWARE_COMPILER_RT
+	bool "pythondata-software-compiler_rt"
+
+	depends on BR2_PACKAGE_PYTHON3
+	help
+	  Non-Python  files needed for the software compiler_rt packaged
+	  into a Python module so they can be used with Python libraries and tools.
+
+	  https://github.com/litex-hub/pythondata-software-compiler_rt/
