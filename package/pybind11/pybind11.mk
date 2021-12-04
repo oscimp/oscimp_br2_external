@@ -13,30 +13,29 @@ PYBIND11_SUPPORTS_IN_SOURCE_BUILD = YES
 
 HOST_PYBIND11_CONF_OPTS = \
 	-DBUILD_DOCS=OFF \
-	-DDOWNLOAD_EIGEN=OFF \
-	-DPYTHON=$(TARGET_DIR)/usr/bin/python \
-	-DPYTHON_PREFIX=$(STAGING_DIR)/usr
+	-DDOWNLOAD_EIGEN=OFF
 
-# pybind11-python support activation
-# this requires the cmake build installed within $(@D)
+# pybind11 python support activation
 ifeq ($(BR2_PACKAGE_PYBIND11_WITH_PYTHON),y)
-
 HOST_PYBIND11_DEPENDENCIES += host-python3
 
-HOST_PYBIND11_CONF_OPTS += -DCMAKE_INSTALL_PREFIX=$(@D)/pybind11
+# pybind11 with python requires cmake install in $(@D)
+HOST_PYBIND11_CONF_OPTS += \
+	-DCMAKE_INSTALL_PREFIX=$(@D)/pybind11 \
+	-DPYTHON=$(HOST_DIR)/bin/python3 \
+	-DPYTHON_PREFIX=$(STAGING_DIR)/usr \
+	-DPYBIND_FINDPYTHON=ON \
+	-DPYBIND11_NOPYTHON=OFF
 
 define PYBIND11_PYTHON_BUILD
 	cd $(@D) && $(HOST_DIR)/bin/python setup.py install
 endef
 
 HOST_PYBIND11_POST_INSTALL_HOOKS += PYBIND11_PYTHON_BUILD
-
 else
-
 HOST_PYBIND11_CONF_OPTS += \
 	-DPYBIND_FINDPYTHON=OFF \
 	-DPYBIND11_NOPYTHON=ON
-
 endif
 
 $(eval $(host-cmake-package))

@@ -20,6 +20,6 @@ config BR2_PACKAGE_PYBIND11_WITH_PYTHON
 	bool "pybind11-python"
 	depends on BR2_PACKAGE_PYTHON3
 	help
-	  Activate support for python-pybind
+	  Activate support for python
 
 endif
