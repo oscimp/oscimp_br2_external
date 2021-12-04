@@ -27,18 +27,33 @@ else
 PYTHON_SCIPY_DEPENDENCIES += lapack
 endif
 
-PYTHON_SCIPY_ENV += LDFLAGS="$(TARGET_LDFLAGS) -shared \
-			-L$(PYTHON3_PATH)/site-packages/numpy/core/lib"
+PYTHON_SCIPY_CFLAGS = "$(TARGET_CFLAGS)"
+#TODO@GBR
+# checker les optimization fpu
+#ifeq ($(BR2_ARM_CPU_HAS_NEON):$(BR2_ARM_SOFT_FLOAT),y:)
+#PYTHON_SCIPY_CFLAGS += -mfpu=neon
+#else
+#PYTHON_SCIPY_CONF_OPTS += --disable-neon
+#endif
+
+PYTHON_SCIPY_LDFLAGS = "$(TARGET_LDFLAGS) -shared -L$(PYTHON3_PATH)/site-packages/numpy/core/lib"
+
+PYTHON_SCIPY_ENV += CFLAGS=$(PYTHON_SCIPY_CFLAGS)
+PYTHON_SCIPY_ENV += LDFLAGS=$(PYTHON_SCIPY_LDFLAGS)
 
 # must be used to locate 'gfortran'
 PYTHON_SCIPY_ENV += F90="$(TARGET_FC)"
 
 # trick to locate 'lapack' and 'blas'
-define PYTHON_SCIPY_CONFIGURE_CMDS
+define PYTHON_SCIPY_LOCATE_LAPACK_BLAS_LIBS
 	rm -f $(@D)/site.cfg
 	echo "[DEFAULT]" >> $(@D)/site.cfg
 	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
 	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
 endef
 
+PYTHON_SCIPY_PRE_CONFIGURE_HOOKS += PYTHON_SCIPY_LOCATE_LAPACK_BLAS_LIBS
+HOST_PYTHON_SCIPY_PRE_CONFIGURE_HOOKS += PYTHON_SCIPY_LOCATE_LAPACK_BLAS_LIBS
+
 $(eval $(python-package))
+$(eval $(host-python-package))
