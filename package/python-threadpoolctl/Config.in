@@ -1,0 +1,10 @@
+config BR2_PACKAGE_PYTHON_THREADPOOLCTL
+	bool "python-threadpoolctl"
+	depends on BR2_PACKAGE_PYTHON3
+	help
+	  Python helpers to limit the number of threads
+	  used in the threadpool-backed of common native
+	  libraries used for scientific computing and
+	  data science (e.g. BLAS and OpenMP).
+
+	  https://github.com/joblib/threadpoolctl

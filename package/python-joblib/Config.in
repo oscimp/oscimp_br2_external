@@ -1,0 +1,8 @@
+config BR2_PACKAGE_PYTHON_JOBLIB
+	bool "python-joblib"
+	depends on BR2_PACKAGE_PYTHON3
+	help
+	  Joblib is a set of tools to provide lightweight
+	  pipelining in Python.
+
+	  https://joblib.readthedocs.io/en/latest/

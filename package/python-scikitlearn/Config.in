@@ -1,0 +1,29 @@
+comment "python-scikitlearn needs a toolchain with fortran"
+	  depends on !BR2_TOOLCHAIN_HAS_FORTRAN
+
+comment "python-scikitlearn needs lib openblas"
+	  depends on !BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
+
+comment "python-scikitlearn needs python-numpy"
+	depends on !BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+
+comment "python-scikitlearn needs python3"
+	depends on !BR2_PACKAGE_PYTHON3
+
+config BR2_PACKAGE_PYTHON_SCIKITLEARN
+	bool "python-scikitlearn"
+	depends on BR2_PACKAGE_PYTHON3
+	depends on BR2_TOOLCHAIN_HAS_FORTRAN
+	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
+	select BR2_PACKAGE_PYTHON_NUMPY
+	select BR2_PACKAGE_PYTHON_SCIPY
+	select BR2_PACKAGE_PYTHON_JOBLIB
+	select BR2_PACKAGE_PYTHON_THREADPOOLCTL
+	select BR2_PACKAGE_OPENBLAS
+	select BR2_PACKAGE_LAPACK
+	help
+	  Scikit-Learn is a Python module for machine learning
+	  built on top of Python-Scipy.
+	  https://scikit-learn.org/
