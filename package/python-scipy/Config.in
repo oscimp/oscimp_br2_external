@@ -1,3 +1,6 @@
+comment "python-scipy needs a toolchain w/ C++, wchar"
+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+
 comment "python-scipy needs a toolchain w/ fortran"
 	depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
 	depends on !BR2_TOOLCHAIN_HAS_FORTRAN
@@ -5,21 +8,24 @@ comment "python-scipy needs a toolchain w/ fortran"
 comment "python-scipy needs lib openblas or lapack"
 	  depends on !BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS && !BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
 
-comment "python-scipy needs python-numpy"
-	depends on !BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-
-comment "python-scipy needs a toolchain w/ C++, wchar" # pybind11 with python
-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+comment "python-scipy needs glibc or musl"
+	depends on BR2_PACKAGE_PYTHON3
+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
 
 config BR2_PACKAGE_PYTHON_SCIPY
 	bool "python-scipy"
+	depends on BR2_PACKAGE_PYTHON3
 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
 	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS || \
 		(BR2_PACKAGE_LAPACK_ARCH_SUPPORTS && BR2_TOOLCHAIN_HAS_FORTRAN)
 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
-	select BR2_PACKAGE_PYBIND11
-	select BR2_PACKAGE_PYBIND11_WITH_PYTHON
 	select BR2_PACKAGE_PYTHON_NUMPY # runtime
+	select BR2_PACKAGE_PYTHON_PYBIND
+	select BR2_PACKAGE_PYTHON_PYTHRAN
+	select BR2_PACKAGE_PYTHON_BENIGET
+	select BR2_PACKAGE_PYTHON_GAST
+	select BR2_PACKAGE_PYTHON_PLY
 	select BR2_PACKAGE_BOOST
 	select BR2_PACKAGE_BOOST_PYTHON
 	help
