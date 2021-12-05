@@ -13,22 +13,21 @@ PYBIND11_SUPPORTS_IN_SOURCE_BUILD = YES
 
 PYBIND11_CONF_OPTS = \
 	-DBUILD_DOCS=OFF \
-	-DPYBIND11_TEST=OFF \
-	-DPYBIND11_NOPYTHON=ON
+	-DPYBIND11_TEST=OFF
 
 HOST_PYBIND11_CONF_OPTS = \
 	-DBUILD_DOCS=OFF \
-	-DPYBIND11_TEST=OFF \
-	-DPYBIND11_NOPYTHON=ON
+	-DPYBIND11_TEST=OFF
 
-## package uses DESTDIR
-#define PYBIND11_INSTALL_CMDS
-#	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-#		prefix=/usr DESTDIR=$(TARGET_DIR) install
-#endef
+# do not search for python,
+# we define it ourselves
+PYBIND11_CONF_OPTS += \
+	-DPYBIND11_NOPYTHON=ON \
+	-DPYTHON=$(HOST_DIR)/usr/bin/python
 
-#PYBIND11_INSTALL_STAGING_OPTS = DESTDIR=/usr PREFIX=$(STAGING_DIR)
-#PYBIND11_INSTALL_TARGET_OPTS = PREFIX=$(TARGET_DIR)
+HOST_PYBIND11_CONF_OPTS += \
+	-DPYBIND11_NOPYTHON=ON \
+	-DPYTHON=$(HOST_DIR)/usr/bin/python
 
 # pybind11 python support activation
 ifeq ($(BR2_PACKAGE_PYBIND11_WITH_PYTHON),y)
@@ -38,20 +37,18 @@ HOST_PYBIND11_DEPENDENCIES += host-python3
 # building python side of this package
 # requires cmake install in $(@D)/pybind11
 PYBIND11_CONF_OPTS += \
-	-DPYTHON=$(HOST_DIR)/usr/bin/python3 \
 	-DPYTHON_PREFIX=$(STAGING_DIR)/usr
 	#-DCMAKE_INSTALL_PREFIX=$(@D)/pybind11 \
 
 HOST_PYBIND11_CONF_OPTS += \
-	-DPYTHON=$(HOST_DIR)/usr/bin/python3 \
 	-DPYTHON_PREFIX=$(HOST_DIR)/usr
-	#-DCMAKE_INSTALL_PREFIX=$(@D)/pybind11 \
 
 # trick to build python side of this package
 define PYBIND11_PYTHON_BUILD
 	cd $(@D) && $(HOST_DIR)/usr/bin/python3 setup.py install
 endef
 
+PYBIND11_POST_INSTALL_HOOKS += PYBIND11_PYTHON_BUILD
 HOST_PYBIND11_POST_INSTALL_HOOKS += PYBIND11_PYTHON_BUILD
 endif
 
