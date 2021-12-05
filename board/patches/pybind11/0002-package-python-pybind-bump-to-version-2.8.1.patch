@@ -1,0 +1,37 @@
+From 9b645137e35c84c8f443096baac75a674dd18e13 Mon Sep 17 00:00:00 2001
+From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+Date: Sun, 5 Dec 2021 21:42:22 +0100
+Subject: [PATCH] package/python-pybind: bump to version 2.8.1
+
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+---
+ package/python-pybind/python-pybind.hash | 2 +-
+ package/python-pybind/python-pybind.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/python-pybind/python-pybind.hash b/package/python-pybind/python-pybind.hash
+index a68ac846e2..e1d86a4494 100644
+--- a/package/python-pybind/python-pybind.hash
++++ b/package/python-pybind/python-pybind.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  cdbe326d357f18b83d10322ba202d69f11b2f49e2d87ade0dc2be0c5c34f8e2a  python-pybind-2.6.1.tar.gz
++sha256  f1bcc07caa568eb312411dde5308b1e250bd0e1bc020fae855bf9f43209940cc  python-pybind-2.8.1.tar.gz
+ # License files, locally calculated
+ sha256  83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb  LICENSE
+diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
+index 080586a877..5519e80527 100644
+--- a/package/python-pybind/python-pybind.mk
++++ b/package/python-pybind/python-pybind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYBIND_VERSION = 2.6.1
++PYTHON_PYBIND_VERSION = 2.8.1
+ PYTHON_PYBIND_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND_VERSION))
+ PYTHON_PYBIND_LICENSE = BSD-3-Clause
+ PYTHON_PYBIND_LICENSE_FILES = LICENSE
+-- 
+2.20.1
+
