@@ -13,8 +13,8 @@ PYTHON_SCIPY_LICENSE_FILES = LICENSE.txt doc/sphinxext/LICENSE.txt \
 PYTHON_SCIPY_SETUP_TYPE = setuptools
 
 PYTHON_SCIPY_DEPENDENCIES = host-python-numpy \
-	host-pybind11 \
 	boost \
+	host-python-pybind \
 	host-python-pythran \
 	host-python-gast \
 	host-python-beniget \
@@ -28,23 +28,18 @@ PYTHON_SCIPY_DEPENDENCIES += lapack
 endif
 
 PYTHON_SCIPY_CFLAGS = "$(TARGET_CFLAGS)"
-#TODO@GBR
-# checker les optimization fpu
-#ifeq ($(BR2_ARM_CPU_HAS_NEON):$(BR2_ARM_SOFT_FLOAT),y:)
-#PYTHON_SCIPY_CFLAGS += -mfpu=neon
-#else
-#PYTHON_SCIPY_CONF_OPTS += --disable-neon
-#endif
-
 PYTHON_SCIPY_LDFLAGS = "$(TARGET_LDFLAGS) -shared -L$(PYTHON3_PATH)/site-packages/numpy/core/lib"
-
 PYTHON_SCIPY_ENV += CFLAGS=$(PYTHON_SCIPY_CFLAGS)
 PYTHON_SCIPY_ENV += LDFLAGS=$(PYTHON_SCIPY_LDFLAGS)
 
-# must be used to locate 'gfortran'
+HOST_PYTHON_SCIPY_CFLAGS = "$(HOST_CFLAGS)"
+HOST_PYTHON_SCIPY_LDFLAGS = "$(HOST_LDFLAGS) -shared -L$(PYTHON3_PATH)/site-packages/numpy/core/lib"
+HOST_PYTHON_SCIPY_ENV += CFLAGS=$(HOST_PYTHON
+
+# must be used to locate fortran compiler
 PYTHON_SCIPY_ENV += F90="$(TARGET_FC)"
 
-# trick to locate 'lapack' and 'blas'
+# tick to locate 'lapack' and 'blas'
 define PYTHON_SCIPY_LOCATE_LAPACK_BLAS_LIBS
 	rm -f $(@D)/site.cfg
 	echo "[DEFAULT]" >> $(@D)/site.cfg
