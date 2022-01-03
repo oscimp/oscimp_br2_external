@@ -1,0 +1,50 @@
+diff -r -u a/gr-digital/lib/map_bb_impl.cc b/gr-digital/lib/map_bb_impl.cc
+--- a/gr-digital/lib/map_bb_impl.cc	2021-09-30 16:11:04.000000000 +0200
++++ b/gr-digital/lib/map_bb_impl.cc	2021-10-04 15:11:43.140979407 +0200
+@@ -37,20 +37,20 @@
+ {
+     gr::thread::scoped_lock guard(d_mutex);
+ 
+-    for (unsigned int i = 0; i < s_map_size; i++) {
++    for (unsigned int i = 0; i < S_MAP_SIZE; i++) {
+         d_map[i] = i;
+     }
+ 
+-    const unsigned int size = std::min(s_map_size, map.size());
++    const unsigned int size = std::min(S_MAP_SIZE, map.size());
+     for (unsigned int i = 0; i < size; i++)
+         d_map[i] = map[i];
+ }
+ 
+ std::vector<int> map_bb_impl::map() const
+ {
+-    std::vector<int> m(s_map_size);
++    std::vector<int> m(S_MAP_SIZE);
+     gr::thread::scoped_lock guard(d_mutex);
+-    for (unsigned int i = 0; i < s_map_size; i++) {
++    for (unsigned int i = 0; i < S_MAP_SIZE; i++) {
+         m[i] = d_map[i];
+     }
+     return m;
+diff -r -u a/gr-digital/lib/map_bb_impl.h b/gr-digital/lib/map_bb_impl.h
+--- a/gr-digital/lib/map_bb_impl.h	2021-09-30 16:11:04.000000000 +0200
++++ b/gr-digital/lib/map_bb_impl.h	2021-10-04 15:11:32.474313121 +0200
+@@ -14,14 +14,15 @@
+ #include <gnuradio/digital/map_bb.h>
+ #include <gnuradio/thread/thread.h>
+ 
++#define S_MAP_SIZE 0x100U
++
+ namespace gr {
+ namespace digital {
+ 
+ class map_bb_impl : public map_bb
+ {
+ private:
+-    static constexpr size_t s_map_size = 0x100;
+-    unsigned char d_map[s_map_size];
++    unsigned char d_map[S_MAP_SIZE];
+     mutable gr::thread::mutex d_mutex;
+ 
+ public:
+

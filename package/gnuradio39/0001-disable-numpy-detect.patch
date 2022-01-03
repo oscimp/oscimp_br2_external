@@ -1,0 +1,14 @@
+diff -u a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2021-09-30 16:11:04.000000000 +0200
++++ b/CMakeLists.txt	2021-10-04 14:21:49.211086985 +0200
+@@ -337,7 +337,9 @@
+ GR_REGISTER_COMPONENT("python-support" ENABLE_PYTHON
+     PYTHONLIBS_FOUND
+     pybind11_FOUND
+-    NUMPY_FOUND
++    # Disable to allow building without finding numpy,
++    # since finding numpy is failing
++    # NUMPY_FOUND
+ )
+ 
+ if(${CMAKE_BUILD_TYPE} STREQUAL "Coverage")
