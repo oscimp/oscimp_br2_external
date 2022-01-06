@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-GNURADIO39_VERSION = 3.9.3.0
+GNURADIO39_VERSION = 3.9.4.0
 GNURADIO39_SOURCE = v$(GNURADIO39_VERSION).tar.gz
 GNURADIO39_SITE = https://github.com/gnuradio/gnuradio/archive/refs/tags
 GNURADIO39_LICENSE = GPL-3.0+
@@ -19,24 +19,20 @@ else ifeq ($(BR2_PACKAGE_PYTHON3),y)
 GNURADIO39_PYVER = $(PYTHON3_VERSION_MAJOR)
 endif
 
-# host-python-mako and host-python-six are needed for volk to compile
 GNURADIO39_DEPENDENCIES = \
-	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python) \
-	python-pybind \
-	host-python-mako \
-	host-python-six \
+	host-python3 \
 	boost \
 	log4cpp \
 	gmp \
 	volk
 
 GNURADIO39_CONF_OPTS = \
-	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python \
+	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3 \
 	-DENABLE_DEFAULT=OFF \
 	-DENABLE_GNURADIO39_RUNTIME=ON \
+	-DENABLE_INTERNAL_VOLK=OFF \
 	-DENABLE_TESTING=OFF \
-	-DXMLTO_EXECUTABLE=NOTFOUND \
-        -Dpybind11_DIR=$(STAGING_DIR)/usr/lib/python3.9/site-packages/pybind11/share/cmake/pybind11/
+	-DXMLTO_EXECUTABLE=NOTFOUND
 
 # For third-party blocks, the gnuradio libraries are mandatory at
 # compile time.
@@ -122,21 +118,17 @@ GNURADIO39_CONF_OPTS += -DENABLE_GR_FILTER=OFF
 endif
 
 ifeq ($(BR2_PACKAGE_GNURADIO39_PYTHON),y)
-GNURADIO39_DEPENDENCIES += python3
-GNURADIO39_CONF_OPTS += -DENABLE_PYTHON=ON
+GNURADIO39_DEPENDENCIES += python3 python-numpy host-python-pybind \
+	host-python-mako host-python-numpy
+GNURADIO39_CONF_OPTS += -DENABLE_PYTHON=ON \
+	-Dpybind11_DIR="$(shell $(HOST_DIR)/bin/pybind11-config --cmakedir)"
+
 # mandatory to install python modules in site-packages and to use
 # correct path for python libraries
 GNURADIO39_CONF_OPTS += -DGR_PYTHON_RELATIVE=ON \
-	-DGR_PYTHON_DIR=lib/python$(GNURADIO39_PYVER)/site-packages \
-	-DCMAKE_CXX_FLAGS="-isystem $(STAGING_DIR)/usr/lib/python3.9/site-packages/numpy/core/include"
+	-DGR_PYTHON_DIR=lib/python$(GNURADIO39_PYVER)/site-packages
 else
 GNURADIO39_CONF_OPTS += -DENABLE_PYTHON=OFF
-endif
-
-ifeq ($(BR2_PACKAGE_GNURADIO39_PAGER),y)
-GNURADIO39_CONF_OPTS += -DENABLE_GR_PAGER=ON
-else
-GNURADIO39_CONF_OPTS += -DENABLE_GR_PAGER=OFF
 endif
 
 ifeq ($(BR2_PACKAGE_GNURADIO39_QTGUI),y)

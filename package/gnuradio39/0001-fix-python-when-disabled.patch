@@ -1,0 +1,168 @@
+From c67517e5e0be2273227453b762b809325f23aebd Mon Sep 17 00:00:00 2001
+From: Josh Morman <jmorman@gnuradio.org>
+Date: Tue, 4 Jan 2022 16:59:32 -0500
+Subject: [PATCH] cmake: build python deps conditionally
+
+Signed-off-by: Josh Morman <jmorman@gnuradio.org>
+---
+ .github/workflows/make-test.yml     | 25 +++++++++++++++++++++++++
+ CMakeLists.txt                      | 13 +++++++++----
+ gnuradio-runtime/CMakeLists.txt     |  9 +++++++++
+ gnuradio-runtime/lib/CMakeLists.txt | 23 +++++++++++++++++------
+ 4 files changed, 60 insertions(+), 10 deletions(-)
+
+Index: gnuradio-3.9.4.0/.github/workflows/make-test.yml
+===================================================================
+--- gnuradio-3.9.4.0.orig/.github/workflows/make-test.yml
++++ gnuradio-3.9.4.0/.github/workflows/make-test.yml
+@@ -110,3 +110,28 @@ jobs:
+        su -c ldconfig
+     - name: Test Python3
+       run: python3 -c "import gnuradio.blocks; print(gnuradio.blocks.complex_to_float())"
++  no-python:
++  # All of these shall depend on the formatting check (needs: check-formatting)
++    needs: [check-formatting, check-python-formatting]
++    runs-on: ubuntu-latest
++    # The GH default is 360 minutes (it's also the max as of Feb-2021). However
++    # we should fail sooner. The only reason to exceed this time is if a test
++    # hangs.
++    timeout-minutes: 120
++    name: C++ Only Build (Ubuntu 20.04)
++    container:
++      image: 'gnuradio/ci:ubuntu-20.04-3.9'
++      volumes:
++        - build_data:/build
++      options: --cpus 2
++    steps:
++    - uses: actions/checkout@v2
++      name: Checkout Project
++    - name: CMake
++      env:
++        CXXFLAGS: -Werror -Wno-error=invalid-pch
++      run: 'cd /build && cmake ${GITHUB_WORKSPACE} -DENABLE_DOXYGEN=OFF -DENABLE_PYTHON=OFF'
++    - name: Make
++      run: 'cd /build && make -j2 -k'
++    - name: Make Test
++      run: 'cd /build && ctest --output-on-failure'
+Index: gnuradio-3.9.4.0/CMakeLists.txt
+===================================================================
+--- gnuradio-3.9.4.0.orig/CMakeLists.txt
++++ gnuradio-3.9.4.0/CMakeLists.txt
+@@ -332,9 +332,12 @@ GR_PYTHON_CHECK_MODULE_RAW(
+     )
+ 
+ 
+-find_package(pybind11 REQUIRED)
++find_package(pybind11)
++IF(pybind11_FOUND)
+ IF(${pybind11_VERSION} VERSION_LESS ${PYBIND11_MIN_VERSION})
+-    message(FATAL_ERROR "pybind11 version ${pybind11_VERSION} < ${PYBIND11_MIN_VERSION}")
++    message(WARNING "pybind11 version ${pybind11_VERSION} < ${PYBIND11_MIN_VERSION}")
++    set(pybind11_FOUND False)
++ENDIF()
+ ENDIF()
+ 
+ include(GrComponent)
+@@ -444,7 +447,6 @@ GR_REGISTER_COMPONENT("post-install" ENA
+ ########################################################################
+ add_subdirectory(docs)
+ add_subdirectory(gnuradio-runtime)
+-add_subdirectory(grc)
+ add_subdirectory(gr-blocks)
+ add_subdirectory(gr-fec)
+ add_subdirectory(gr-fft)
+@@ -457,13 +459,16 @@ add_subdirectory(gr-channels)
+ add_subdirectory(gr-qtgui)
+ add_subdirectory(gr-trellis)
+ add_subdirectory(gr-uhd)
+-add_subdirectory(gr-utils)
+ add_subdirectory(gr-video-sdl)
+ add_subdirectory(gr-vocoder)
+ add_subdirectory(gr-wavelet)
+ add_subdirectory(gr-zeromq)
+ add_subdirectory(gr-network)
+ add_subdirectory(gr-soapy)
++if (ENABLE_PYTHON)
++add_subdirectory(grc)
++add_subdirectory(gr-utils)
++endif()
+ 
+ # Defining GR_CTRLPORT for gnuradio/config.h
+ if(ENABLE_GR_CTRLPORT)
+Index: gnuradio-3.9.4.0/gnuradio-runtime/CMakeLists.txt
+===================================================================
+--- gnuradio-3.9.4.0.orig/gnuradio-runtime/CMakeLists.txt
++++ gnuradio-3.9.4.0/gnuradio-runtime/CMakeLists.txt
+@@ -23,6 +23,7 @@ GR_CHECK_LINUX_SCHED_AVAIL()
+ # Register component
+ ########################################################################
+ include(GrComponent)
++if (ENABLE_PYTHON)
+ GR_REGISTER_COMPONENT("gnuradio-runtime" ENABLE_GNURADIO_RUNTIME
+     Boost_FOUND
+     PYTHONINTERP_FOUND
+@@ -30,6 +31,14 @@ GR_REGISTER_COMPONENT("gnuradio-runtime"
+     LOG4CPP_FOUND
+     pybind11_FOUND
+ )
++else()
++GR_REGISTER_COMPONENT("gnuradio-runtime" ENABLE_GNURADIO_RUNTIME
++    Boost_FOUND
++    PYTHONINTERP_FOUND
++    MPLIB_FOUND
++    LOG4CPP_FOUND
++)
++endif()
+ 
+ get_filename_component(GNURADIO_RUNTIME_PYTHONPATH
+     ${CMAKE_SOURCE_DIR}/python ABSOLUTE
+Index: gnuradio-3.9.4.0/gnuradio-runtime/lib/CMakeLists.txt
+===================================================================
+--- gnuradio-3.9.4.0.orig/gnuradio-runtime/lib/CMakeLists.txt
++++ gnuradio-3.9.4.0/gnuradio-runtime/lib/CMakeLists.txt
+@@ -52,7 +52,6 @@ add_library(gnuradio-runtime
+   block.cc
+   block_detail.cc
+   block_executor.cc
+-  block_gateway_impl.cc
+   block_registry.cc
+   buffer.cc
+   flat_flowgraph.cc
+@@ -94,6 +93,12 @@ add_library(gnuradio-runtime
+   vmcircbuf_sysv_shm.cc
+   )
+ 
++if (ENABLE_PYTHON)
++  target_sources(gnuradio-runtime PRIVATE
++    block_gateway_impl.cc
++  )
++endif()
++
+ # Messages
+ target_sources(gnuradio-runtime PRIVATE
+   ${CMAKE_CURRENT_SOURCE_DIR}/messages/msg_accepter.cc
+@@ -131,14 +136,20 @@ target_link_libraries(gnuradio-runtime P
+   # INTERFACE/PRIVATE split so users of the library can choose how to link to Python
+   # (importantly, extension modules can avoid linking against Python and resolve
+   #  their own Python symbols at runtime through the Python interpreter's linking)
+-  INTERFACE
+-    Python::Module
+   PRIVATE
+-    Python::Python
+     libunwind::libunwind
+-    pybind11::pybind11
+   )
+ 
++if (ENABLE_PYTHON)
++target_link_libraries(gnuradio-runtime
++  INTERFACE
++  Python::Module
++  PRIVATE
++  Python::Python
++  pybind11::pybind11
++)
++endif()
++
+ target_include_directories(gnuradio-runtime
+   PUBLIC
+     $<INSTALL_INTERFACE:include>

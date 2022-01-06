@@ -4,7 +4,8 @@ comment "gnuradio39 needs a toolchain w/ C++, NPTL, wchar, dynamic library"
 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
 
-comment "gnuradio needs a toolchain not affected by GCC bug 64735"
+comment "gnuradio needs a toolchain not affected by GCC bug 43744 and 64735"
+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_43744
 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
 
 config BR2_PACKAGE_GNURADIO39
@@ -14,7 +15,8 @@ config BR2_PACKAGE_GNURADIO39
 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
 	depends on BR2_USE_MMU # use fork()
 	depends on BR2_USE_WCHAR # boost
-	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic
+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic, boost-filesystem
+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_43744
 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
 	select BR2_PACKAGE_BOOST
 	select BR2_PACKAGE_BOOST_ATOMIC
@@ -26,7 +28,7 @@ config BR2_PACKAGE_GNURADIO39
 	select BR2_PACKAGE_BOOST_THREAD
 	select BR2_PACKAGE_LOG4CPP
 	select BR2_PACKAGE_GMP
-        select BR2_PACKAGE_VOLK
+	select BR2_PACKAGE_VOLK
 	help
 	  GNU Radio is a free & open-source software development
 	  toolkit that provides signal processing blocks to implement
@@ -79,8 +81,8 @@ config BR2_PACKAGE_GNURADIO39_PYTHON
 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
 	select BR2_PACKAGE_BOOST_PYTHON
 	select BR2_PACKAGE_PYTHON_NUMPY # runtime
+	select BR2_PACKAGE_PYTHON_PYBIND # runtime
 	select BR2_PACKAGE_PYTHON_SIX # runtime
-        select BR2_PACKAGE_PYTHON_PYBIND
 	help
 	  Enable python component
 
@@ -131,12 +133,6 @@ config BR2_PACKAGE_GNURADIO39_FILTER
 	select BR2_PACKAGE_GNURADIO39_FFT
 	help
 	  Filter signal processing blocks
-
-config BR2_PACKAGE_GNURADIO39_PAGER
-	bool "gr-flex support"
-	select BR2_PACKAGE_GNURADIO39_ANALOG
-	help
-	  FLEX pager decoder implementation blocks
 
 config BR2_PACKAGE_GNURADIO39_QTGUI
 	bool "gr-qtgui"
