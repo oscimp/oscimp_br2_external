@@ -1,0 +1,28 @@
+Index: gnuradio-3.9.4.0/cmake/Modules/GrPybind.cmake
+===================================================================
+--- gnuradio-3.9.4.0.orig/cmake/Modules/GrPybind.cmake
++++ gnuradio-3.9.4.0/cmake/Modules/GrPybind.cmake
+@@ -7,6 +7,7 @@ macro(GR_PYBIND_MAKE name updir filter f
+ configure_file(${CMAKE_SOURCE_DIR}/docs/doxygen/pydoc_macros.h ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
+ 
+ pybind11_add_module(${name}_python ${files})
++set_target_properties(${name}_python PROPERTIES SUFFIX ".so")
+ 
+ SET(MODULE_NAME ${name})
+ if (${name} STREQUAL gr)
+@@ -118,6 +119,7 @@ foreach(file ${files})
+ endforeach()
+ 
+ pybind11_add_module(${name}_python ${files})
++set_target_properties(${name}_python PROPERTIES SUFFIX ".so")
+ 
+ SET(MODULE_NAME ${name})
+ if (${name} STREQUAL gr)
+@@ -239,6 +241,7 @@ endforeach()
+ configure_file(${CMAKE_SOURCE_DIR}/docs/doxygen/pydoc_macros.h ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
+ 
+ pybind11_add_module(${name}_python ${files})
++set_target_properties(${name}_python PROPERTIES SUFFIX ".so")
+ 
+ SET(MODULE_NAME ${name})
+ if (${name} STREQUAL gr)
