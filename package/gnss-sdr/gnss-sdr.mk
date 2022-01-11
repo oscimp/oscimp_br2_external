@@ -13,7 +13,13 @@ GNSS_SDR_LICENSE_FILES = COPYING
 GNSS_SDR_SUPPORTS_IN_SOURCE_BUILD = NO
 
 GNSS_SDR_DEPENDENCIES = lapack armadillo boost openssl lapack \
-	gflags glog log4cpp gnuradio gnutls matio protobuf pugixml
+	gflags glog log4cpp gnutls matio protobuf pugixml
+
+ifeq ($(BR2_PACKAGE_GNURADIO),y)
+GNSS_SDR_DEPENDENCIES += gnuradio
+else
+GNSS_SDR_DEPENDENCIES += gnuradio39
+endif
 
 GNSS_SDR_CONF_OPTS += \
 	-DBUILD_SHARED_LIBS=OFF \
