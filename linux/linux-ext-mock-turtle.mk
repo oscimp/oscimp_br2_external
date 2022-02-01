@@ -20,6 +20,7 @@ define MOCK_TURTLE_PREPARE_KERNEL
 	\
 	`# Copy sources`; \
 	cp -dpfr $(MOCK_TURTLE_DIR)/software/kernel $${DEST_DIR}/mock-turtle; \
+	rm $${DEST_DIR}/mock-turtle/Kbuild; \
 	\
 	`# Add a Kconfig`; \
 	echo 'config MOCK_TURTLE' >> $${DEST_DIR}/mock-turtle/Kconfig; \
@@ -34,5 +35,18 @@ define MOCK_TURTLE_PREPARE_KERNEL
 	echo 'source "drivers/wrtd_ref_spec150t_adc/mock-turtle/Kconfig"' >> $${DEST_DIR}/Kconfig; \
 	\
 	`# Edit Makefile`; \
+	echo 'ccflags-y += -DGIT_VERSION=\"1.2.3\"' > $${DEST_DIR}/mock-turtle/Makefile; \
+	echo 'ccflags-y += -DADDITIONAL_VERSIONS="$$(SUBMODULE_VERSIONS-y)"' >> $${DEST_DIR}/mock-turtle/Makefile; \
+	echo '' >> $${DEST_DIR}/mock-turtle/Makefile; \
+	echo 'obj-$$(CONFIG_MOCK_TURTLE) += mockturtle.o' >> $${DEST_DIR}/mock-turtle/Makefile; \
+	echo 'mockturtle-y :=  mockturtle-core.o' >> $${DEST_DIR}/mock-turtle/Makefile; \
+	echo 'mockturtle-y +=  mockturtle-cpu.o' >> $${DEST_DIR}/mock-turtle/Makefile; \
+	echo 'mockturtle-y +=  mockturtle-hmq.o' >> $${DEST_DIR}/mock-turtle/Makefile; \
+	echo 'mockturtle-y +=  mockturtle-tty.o' >> $${DEST_DIR}/mock-turtle/Makefile; \
+	echo 'mockturtle-y +=  mockturtle-dbg.o' >> $${DEST_DIR}/mock-turtle/Makefile; \
+	echo 'mockturtle-y +=  mockturtle-dbg.o' >> $${DEST_DIR}/mock-turtle/Makefile; \
+	echo 'mockturtle-y +=  mockturtle-compat.o' >> $${DEST_DIR}/mock-turtle/Makefile; \
+	\
+	`# Edit global Makefile`; \
 	echo 'obj-m += mock-turtle/' >> $${DEST_DIR}/Makefile;
 endef
