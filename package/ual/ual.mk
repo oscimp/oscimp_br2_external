@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-UAL_VERSION = 42a5d4923d47cf65e171d0257bf30efe7c660be9
+UAL_VERSION = 8825a2d2c4e2caa42014a64fdf3868414a410138
 UAL_SITE = https://gitlab.cern.ch/cohtdrivers/ual
 UAL_SITE_METHOD = git
 
