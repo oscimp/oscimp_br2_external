@@ -1,0 +1,9 @@
+config BR2_PACKAGE_WRPC_SW
+	bool "wrpc-sw"
+	select BR2_PACKAGE_READLINE
+	help
+	  White Rabbit Trigger Distribution (WRTD) is a generic
+	  framework  for distributing triggers (events) between
+	  Nodes over a White Rabbit network.
+
+	  https://ohwr.org/project/wrtd

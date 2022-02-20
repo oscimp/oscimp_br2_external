@@ -14,7 +14,7 @@ config BR2_LINUX_KERNEL_EXT_XTRX_LINUX_PCIE_DRV_ENABLE_WA
 
 endif
 
-comment "WRTD drivers"
+menu "WRTD drivers"
 
 config BR2_LINUX_KERNEL_EXT_FMC_ADC_100M
 	bool "fmc-adc-100m driver"
@@ -98,4 +98,4 @@ config BR2_LINUX_KERNEL_EXT_ZIO
 
 	  https://ohwr.org/project/zio
 
-comment "WRTD drivers end"
+endmenu

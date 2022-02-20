@@ -32,6 +32,9 @@ define GENERAL_CORES_PREPARE_KERNEL
 	cp -dpfr $(GENERAL_CORES_DIR)/software/htvic/drivers $${DEST_DIR}/htvic; \
 	cp -dpfr $(GENERAL_CORES_DIR)/software/i2c-ocores/drivers/i2c/busses $${DEST_DIR}/i2c-ocores; \
 	cp -dpfr $(GENERAL_CORES_DIR)/software/spi-ocores/drivers/spi $${DEST_DIR}/spi-ocores; \
+	rm $${DEST_DIR}/htvic/Kbuild; \
+	rm $${DEST_DIR}/i2c-ocores/Kbuild; \
+	rm $${DEST_DIR}/spi-ocores/Kbuild; \
 	\
 	`# Add Kconfigs`; \
 	echo "config HTVIC" >> $${DEST_DIR}/htvic/Kconfig; \
@@ -48,7 +51,20 @@ define GENERAL_CORES_PREPARE_KERNEL
 	echo 'source "drivers/wrtd_ref_spec150t_adc/general-cores/i2c-ocores/Kconfig"' >> $${DEST_DIR}/Kconfig; \
 	echo 'source "drivers/wrtd_ref_spec150t_adc/general-cores/spi-ocores/Kconfig"' >> $${DEST_DIR}/Kconfig; \
 	\
-	`# Edit Makefile`; \
+	`# Edit htvic Makefile`; \
+	echo 'ccflags-y += -DADDITIONAL_VERSIONS="$$(SUBMODULE_VERSIONS-y)"' > $${DEST_DIR}/htvic/Makefile; \
+	echo 'ccflags-y += -DGIT_VERSION=\"1.2.3.4\"' >> $${DEST_DIR}/htvic/Makefile; \
+	echo 'obj-$$(CONFIG_HTVIC) += htvic.o' >> $${DEST_DIR}/htvic/Makefile; \
+	\
+	`# Edit i2c-ocores Makefile`; \
+	echo 'ccflags-y += -DGIT_VERSION=\"1.2.3.4\"' > $${DEST_DIR}/i2c-ocores/Makefile; \
+	echo 'obj-$$(CONFIG_I2C_OCORES) += i2c-ocores.o' >> $${DEST_DIR}/i2c-ocores/Makefile; \
+	\
+	`# Edit spi-ocores Makefile`; \
+	echo 'ccflags-y += -DGIT_VERSION=\"1.2.3.4\"' > $${DEST_DIR}/spi-ocores/Makefile; \
+	echo 'obj-$$(CONFIG_SPI_OCORES) += spi-ocores.o' >> $${DEST_DIR}/spi-ocores/Makefile; \
+	\
+	`# Edit global Makefile`; \
 	echo 'obj-m += htvic/' >> $${DEST_DIR}/Makefile; \
 	echo 'obj-m += i2c-ocores/' >> $${DEST_DIR}/Makefile; \
 	echo 'obj-m += spi-ocores/' >> $${DEST_DIR}/Makefile;

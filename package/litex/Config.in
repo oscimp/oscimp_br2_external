@@ -1,0 +1,14 @@
+config BR2_PACKAGE_LITEX
+	bool "litex"
+
+	depends on BR2_PACKAGE_PYTHON3
+	select BR2_PACKAGE_MIGEN
+	select BR2_PACKAGE_PYTHON_REQUESTS
+	select BR2_PACKAGE_PYTHON_SERIAL
+	select BR2_PACKAGE_PYTHONDATA_SOFTWARE_COMPILER_RT
+	help
+	  The LiteX framework provides a convenient and efficient
+	  infrastructure to create FPGA Cores/SoCs, to explore various digital
+	  design architectures and create full FPGA based systems.
+
+	  https://github.com/enjoy-digital/litex/

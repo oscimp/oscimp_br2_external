@@ -20,6 +20,7 @@ define FMC_ADC_100M_PREPARE_KERNEL
 	\
 	`# Copy sources`; \
 	cp -dpfr $(FMC_ADC_100M_DIR)/kernel $${DEST_DIR}/fmc-adc-100m; \
+	rm $${DEST_DIR}/fmc-adc-100m/Kbuild; \
 	\
 	`# Add a Kconfig`; \
 	echo 'config FMC_ADC' >> $${DEST_DIR}/fmc-adc-100m/Kconfig; \
@@ -36,5 +37,22 @@ define FMC_ADC_100M_PREPARE_KERNEL
 	echo 'source "drivers/wrtd_ref_spec150t_adc/fmc-adc-100m/Kconfig"' >> $${DEST_DIR}/Kconfig; \
 	\
 	`# Edit Makefile`; \
-	echo 'obj-m += fmc-adc-100m/' >> $${DEST_DIR}/Makefile;
+	echo 'obj-m += fmc-adc-100m/' >> $${DEST_DIR}/Makefile; \
+	\
+	echo 'ccflags-y += -D__ZIO_MIN_MAJOR_VERSION=1' > $${DEST_DIR}/fmc-adc-100m/Makefile; \
+	echo 'ccflags-y += -D__ZIO_MIN_MINOR_VERSION=4' >> $${DEST_DIR}/fmc-adc-100m/Makefile; \
+	echo 'SUBMODULE_VERSIONS-y += MODULE_INFO(version_zio,\"$$(ZIO_VERSION)\");' >> $${DEST_DIR}/fmc-adc-100m/Makefile; \
+	echo 'ccflags-y += -DADDITIONAL_VERSIONS="$$(SUBMODULE_VERSIONS-y)"' >> $${DEST_DIR}/fmc-adc-100m/Makefile; \
+	echo 'ccflags-y += -DGIT_VERSION=\"$$(GIT_VERSION)\" \' >> $${DEST_DIR}/fmc-adc-100m/Makefile; \
+	echo '' >> $${DEST_DIR}/fmc-adc-100m/Makefile; \
+	echo 'obj-$$(CONFIG_FMC_ADC) += fmc-adc-100m14b4ch.o' >> $${DEST_DIR}/fmc-adc-100m/Makefile; \
+	echo 'fmc-adc-100m14b4ch-objs := fa-core.o' >> $${DEST_DIR}/fmc-adc-100m/Makefile; \
+	echo 'fmc-adc-100m14b4ch-objs += fa-zio-drv.o' >> $${DEST_DIR}/fmc-adc-100m/Makefile; \
+	echo 'fmc-adc-100m14b4ch-objs += fa-calibration.o' >> $${DEST_DIR}/fmc-adc-100m/Makefile; \
+	echo 'fmc-adc-100m14b4ch-objs += fa-regtable.o' >> $${DEST_DIR}/fmc-adc-100m/Makefile; \
+	echo 'fmc-adc-100m14b4ch-objs += fa-zio-trg.o' >> $${DEST_DIR}/fmc-adc-100m/Makefile; \
+	echo 'fmc-adc-100m14b4ch-objs += fa-irq.o' >> $${DEST_DIR}/fmc-adc-100m/Makefile; \
+	echo 'fmc-adc-100m14b4ch-objs += fa-debug.o' >> $${DEST_DIR}/fmc-adc-100m/Makefile; \
+	echo 'fmc-adc-100m14b4ch-objs += fa-dma.o' >> $${DEST_DIR}/fmc-adc-100m/Makefile; \
+	echo 'fmc-adc-100m14b4ch-objs += spi.o' >> $${DEST_DIR}/fmc-adc-100m/Makefile;
 endef

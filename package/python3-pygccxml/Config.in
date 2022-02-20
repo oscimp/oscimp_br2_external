@@ -1,0 +1,7 @@
+config BR2_PACKAGE_PYTHON3_PYGCCXML
+	bool "python3-pygccxml"
+	depends on BR2_PACKAGE_PYTHON3
+	help
+	  Python3 module for pygccxml.
+
+	  https://github.com/CastXML/pygccxml
