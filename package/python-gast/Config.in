@@ -1,0 +1,5 @@
+config BR2_PACKAGE_PYTHON_GAST
+	bool "python-gast"
+	help
+	  A generic AST to represent Python2 and Python3
+	  Abstract Syntax Tree (AST).
