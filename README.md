@@ -29,6 +29,12 @@ patch -p1 < gr-osmosdr-add_xtrx_support.patch
 ```
 (the update has been integrated in Buildroot in the latest releases and patching is no longer needed).
 
+To compile ``python-scikitlearn``, make sure to apply the patch *prior* configuring Buildroot, 
+inside the buildroot directory:
+```bash
+patch -p1 < scikitlearn-support.patch
+```
+
 Configuring Buildroot with GNU Radio support is achieved by running from the Buildroot root directory  
 ```bash
 make raspberrypi4_64_gnuradio_defconfig
