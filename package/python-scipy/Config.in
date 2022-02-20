@@ -1,54 +1,29 @@
-comment "python-scipy needs a toolchain w/ C++, wchar"
-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-
-comment "python-scipy needs a toolchain w/ fortran"
-	depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
-	depends on !BR2_TOOLCHAIN_HAS_FORTRAN
-
-comment "python-scipy needs lib openblas or lapack"
-	  depends on !BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS && !BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
-
-comment "python-scipy needs glibc or musl"
-	depends on BR2_PACKAGE_PYTHON3
-	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-
 config BR2_PACKAGE_PYTHON_SCIPY
 	bool "python-scipy"
-	depends on BR2_PACKAGE_PYTHON3
+	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS # openblas
 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
-	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS || \
-		(BR2_PACKAGE_LAPACK_ARCH_SUPPORTS && BR2_TOOLCHAIN_HAS_FORTRAN)
+	depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS # lapack
 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
+	depends on BR2_TOOLCHAIN_HAS_FORTRAN # lapack
+	depends on BR2_INSTALL_LIBSTDCPP
+	depends on BR2_PACKAGE_PYTHON3
+	select BR2_PACKAGE_LAPACK
+	select BR2_PACKAGE_OPENBLAS
 	select BR2_PACKAGE_PYTHON_NUMPY # runtime
 	select BR2_PACKAGE_PYTHON_PYBIND
-	select BR2_PACKAGE_PYTHON_PYTHRAN
-	select BR2_PACKAGE_PYTHON_BENIGET
-	select BR2_PACKAGE_PYTHON_GAST
-	select BR2_PACKAGE_PYTHON_PLY
-	select BR2_PACKAGE_BOOST
-	select BR2_PACKAGE_BOOST_PYTHON
 	help
-	  Scipy is a Python package that includes modules for
-	  statistics, optimization, linear algebra and much
-	  more.
+	  The SciPy library is one of the core packages that make up the
+	  SciPy stack. It provides many user-friendly and efficient
+	  numerical routines such as routines for numerical integration,
+	  interpolation, optimization, linear algebra and statistics.
 
-	  http://www.scipy.org/
+	  https://www.scipy.org/scipylib/
 
-if BR2_PACKAGE_PYTHON_SCIPY
-
-choice
-	prompt "BLAS implementation"
-
-config BR2_PACKAGE_PYTHON_SCIPY_OPENBLAS
-	bool "openblas"
+comment "python-scipy needs toolchain w/ fortran and c++ and glibc or musl"
 	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
-	select BR2_PACKAGE_OPENBLAS
-
-config BR2_PACKAGE_PYTHON_SCIPY_LAPACK
-	bool "lapack"
+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
 	depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
-	select BR2_PACKAGE_LAPACK
-
-endchoice
-endif
+	depends on BR2_PACKAGE_PYTHON3
+	depends on !BR2_TOOLCHAIN_HAS_FORTRAN || \
+		!BR2_INSTALL_LIBSTDCPP || \
+		(!BR2_TOOLCHAIN_USES_GLIBC && !BR2_TOOLCHAIN_USES_MUSL)
