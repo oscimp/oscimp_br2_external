@@ -9,6 +9,7 @@ config BR2_PACKAGE_PYTHON_SCIPY
 	depends on BR2_PACKAGE_PYTHON3
 	select BR2_PACKAGE_LAPACK
 	select BR2_PACKAGE_OPENBLAS
+	select BR2_PACKAGE_ZLIB # runtime scipy::io
 	select BR2_PACKAGE_PYTHON_NUMPY # runtime
 	select BR2_PACKAGE_PYTHON_PYBIND
 	help

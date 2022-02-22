@@ -26,6 +26,7 @@ PYTHON_SCIPY_DEPENDENCIES += \
 	host-meson \
 	host-python-numpy \
 	host-python-pythran \
+	zlib \
 	lapack \
 	openblas \
 	python-numpy \
@@ -36,6 +37,7 @@ HOST_PYTHON_SCIPY_DEPENDENCIES += \
 	host-meson \
 	host-python-numpy \
 	host-python-pythran \
+	zlib \
 	host-lapack \
 	host-openblas \
 	python-numpy \
