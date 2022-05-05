@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PYTHON_AD9548
+	bool "python-ad9548"
+	select BR2_PACKAGE_PYTHON_SMBUS_CFFI
+	help
+	  Python tools to manage AD9548/47 chipsets
+	  https://github.com/gwbres/adi-ad9548
