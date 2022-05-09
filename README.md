@@ -45,12 +45,12 @@ Overall, <code>make menuconfig</code> allows for configuring
 additional settings of the buildroot environment, especially Target Packages, <code>make</code> builds
 the images to be found at the end of the compilation in <code>output/images</code>.
 
-### Scipy + Machine learning (temporary tweak) 
+###  &#9888; Scipy + Machine learning temporary tweak
  
-&#9888; Package `python-scipy` requires a newer 2022.02.1 buildroot revision.
+Package `python-scipy` requires a newer 2022.02.1 buildroot revision.
 
-Package `python-scikitlearn` (machine learning toolkit) requires an extra buildroot patch,
-similar to the `gr-osmosdr` support:
+Package `python-scikitlearn` (machine learning toolkit) requires `scipy` and 
+an extra buildroot patch, similar to the `gr-osmosdr` support:
 
 ```bash
 source sourceme.ggm
