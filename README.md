@@ -29,12 +29,6 @@ patch -p1 < gr-osmosdr-add_xtrx_support.patch
 ```
 (the update has been integrated in Buildroot in the latest releases and patching is no longer needed).
 
-To compile ``python-scikitlearn``, make sure to apply the patch *prior* configuring Buildroot, 
-inside the buildroot directory:
-```bash
-patch -p1 < scikitlearn-support.patch
-```
-
 Configuring Buildroot with GNU Radio support is achieved by running from the Buildroot root directory  
 ```bash
 make raspberrypi4_64_gnuradio_defconfig
@@ -50,3 +44,17 @@ version release.
 Overall, <code>make menuconfig</code> allows for configuring
 additional settings of the buildroot environment, especially Target Packages, <code>make</code> builds
 the images to be found at the end of the compilation in <code>output/images</code>.
+
+### Scipy + Machine learning (temporary tweak) 
+ 
+&#9888; Package `python-scipy` requires a newer 2022.02.1 buildroot revision.
+
+Package `python-scikitlearn` (machine learning toolkit) requires an extra buildroot patch,
+similar to the `gr-osmosdr` support:
+
+```bash
+source sourceme.ggm
+cd buildroot
+patch -p1 < $BR2_EXTERNAL/scikitlearn-support.patch
+```
+
