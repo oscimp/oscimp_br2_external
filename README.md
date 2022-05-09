@@ -50,7 +50,7 @@ the images to be found at the end of the compilation in <code>output/images</cod
 Package `python-scipy` requires a newer 2022.02.1 buildroot revision.
 
 Package `python-scikitlearn` (machine learning toolkit) requires `scipy` and 
-an extra buildroot patch, similar to the `gr-osmosdr` support:
+an extra buildroot patch to be applied prior attempting to build, similar to the `gr-osmosdr` support:
 
 ```bash
 source sourceme.ggm
