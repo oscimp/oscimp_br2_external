@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-PYTHON_SCIPY_VERSION = 1.8.0
+PYTHON_SCIPY_VERSION = 1.8.1
 PYTHON_SCIPY_SOURCE = scipy-$(PYTHON_SCIPY_VERSION).tar.xz
 PYTHON_SCIPY_SITE = https://github.com/scipy/scipy/releases/download/v$(PYTHON_SCIPY_VERSION)
 PYTHON_SCIPY_LICENSE = \
