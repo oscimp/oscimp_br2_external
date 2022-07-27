@@ -45,16 +45,25 @@ Overall, <code>make menuconfig</code> allows for configuring
 additional settings of the buildroot environment, especially Target Packages, <code>make</code> builds
 the images to be found at the end of the compilation in <code>output/images</code>.
 
-###  &#9888; Scipy + Machine learning temporary tweak
- 
-Package `python-scipy` requires a newer 2022.02.1 buildroot revision.
+### Scipy
 
-Package `python-scikitlearn` (machine learning toolkit) requires `scipy` and 
-an extra buildroot patch to be applied prior attempting to build, similar to the `gr-osmosdr` support:
+&#9888; scipy and related topics down below require at least Buildroot v2022.02.1 as opposed to the above.
+
+We provide three configurations that enable `scipy` by default
+
+```bash
+make beaglebone_scipy_defconfig
+make raspberrypi3_64_scipy_defconfig
+make raspberrypi4_64_scipy_defconfig
+```
+
+### Sklearn: machine learning toolkit
+
+Package `python-scikitlearn` requires `scipy` and 
+an extra buildroot patch to be applied prior anything, similarly to the `gr-osmosdr` tweak:
 
 ```bash
 source sourceme.ggm
 cd buildroot
 patch -p1 < $BR2_EXTERNAL/scikitlearn-support.patch
 ```
-
