@@ -47,7 +47,7 @@ the images to be found at the end of the compilation in <code>output/images</cod
 
 ### Scipy
 
-&#9888; scipy and related topics down below require at least Buildroot v2022.02.1 as opposed to the above.
+`package/python-scipy` is now officially integrated. Use latest Buildroot for the following.
 
 We provide three configurations that enable `scipy` by default
 
