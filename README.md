@@ -47,7 +47,7 @@ the images to be found at the end of the compilation in <code>output/images</cod
 
 ### Scipy
 
-`package/python-scipy` is now officially integrated. Use latest Buildroot for the following.
+`package/python-scipy` is now officially integrated.
 
 We provide three configurations that enable `scipy` by default
 
