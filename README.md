@@ -47,8 +47,6 @@ the images to be found at the end of the compilation in <code>output/images</cod
 
 ### Scipy
 
-`package/python-scipy` is now officially integrated.
-
 We provide three configurations that enable `scipy` by default
 
 ```bash
