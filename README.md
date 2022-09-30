@@ -2,7 +2,7 @@
 BR2_EXTERNAL framework for OscillatorIMP supported peripherals, most significantly
 software defined radio applications on Raspberry Pi(3,4)
 
-This support has been tested with the latest stable release of buildroot (2021.11) and git master branch.
+This support has been tested with the latest stable release of buildroot (2022.08) and git master branch.
 
 This BR2_EXTERNAL repository is used as a testbed for embedded software not (yet) released on the official
 Buildroot repository. Main software applications include the GNU Radio framework, White Rabbit and most significantly
@@ -13,7 +13,7 @@ How-to use it
 
 Download the tested buildroot tarball:
 ```bash
-wget https://buildroot.org/downloads/buildroot-2021.08.1.tar.gz
+wget https://buildroot.org/downloads/buildroot-2022.08.tar.gz
 ```
 
 ### Configure, build and install
@@ -46,8 +46,6 @@ additional settings of the buildroot environment, especially Target Packages, <c
 the images to be found at the end of the compilation in <code>output/images</code>.
 
 ### Scipy
-
-`package/python-scipy` is now officially integrated. Use latest Buildroot for the following.
 
 We provide three configurations that enable `scipy` by default
 
