@@ -38,7 +38,7 @@ the Compute Module 4,
 ```bash
 make raspberrypicm4_64_gnuradio_defconfig
 ```
-will configure Buildroot for GNU Radio support (700 MB resulting binary image). Add 39 after gnuradio for the 3.9
+will configure Buildroot for GNU Radio support (700 MB resulting binary image). Add 310 after gnuradio for the 3.10.4
 version release.
 
 Overall, <code>make menuconfig</code> allows for configuring

@@ -18,7 +18,7 @@ GNSS_SDR_DEPENDENCIES = lapack armadillo boost openssl lapack \
 ifeq ($(BR2_PACKAGE_GNURADIO),y)
 GNSS_SDR_DEPENDENCIES += gnuradio
 else
-GNSS_SDR_DEPENDENCIES += gnuradio39
+GNSS_SDR_DEPENDENCIES += gnuradio310
 endif
 
 GNSS_SDR_CONF_OPTS += \
