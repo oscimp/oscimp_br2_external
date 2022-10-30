@@ -5,7 +5,7 @@
 ################################################################################
 
 GNURADIO310_VERSION = 3.10.4.0
-GNURADIO310_SITE = $(call github,gnuradio,gnuradio,v$(GNURADIO_VERSION))
+GNURADIO310_SITE = $(call github,gnuradio,gnuradio,v$(GNURADIO310_VERSION))
 GNURADIO310_LICENSE = GPL-3.0+
 GNURADIO310_LICENSE_FILES = COPYING
 
