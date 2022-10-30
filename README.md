@@ -2,7 +2,7 @@
 BR2_EXTERNAL framework for OscillatorIMP supported peripherals, most significantly
 software defined radio applications on Raspberry Pi(3,4)
 
-This support has been tested with the latest stable release of buildroot (2022.08) and git master branch.
+This support has been tested with the latest stable release of buildroot (2022.08.1) and git master branch.
 
 This BR2_EXTERNAL repository is used as a testbed for embedded software not (yet) released on the official
 Buildroot repository. Main software applications include the GNU Radio framework, White Rabbit and most significantly
@@ -13,7 +13,7 @@ How-to use it
 
 Download the tested buildroot tarball:
 ```bash
-wget https://buildroot.org/downloads/buildroot-2022.08.tar.gz
+wget https://buildroot.org/downloads/buildroot-2022.08.1.tar.gz
 ```
 
 ### Configure, build and install
@@ -31,7 +31,7 @@ patch -p1 < gr-osmosdr-add_xtrx_support.patch
 
 Configuring Buildroot with GNU Radio support is achieved by running from the Buildroot root directory  
 ```bash
-make raspberrypi4_64_gnuradio_defconfig
+make raspberrypi4_64_gnuradio310_defconfig
 ```
 This will configure buildroot for the Raspberry Pi4 supporting the 64 bit instructions and GNU Radio. For
 the Compute Module 4,
