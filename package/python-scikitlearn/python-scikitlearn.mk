@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-PYTHON_SCIKITLEARN_VERSION = 1.1.1
+PYTHON_SCIKITLEARN_VERSION = 1.1.3
 PYTHON_SCIKITLEARN_SITE = $(call github,scikit-learn,scikit-learn,$(PYTHON_SCIKITLEARN_VERSION))
 PYTHON_SCIKITLEARN_LICENSE = BSD-3-Clause
 PYTHON_SCIKITLEARN_LICENSE_FILES = COPYING
