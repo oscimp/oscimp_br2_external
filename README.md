@@ -55,10 +55,10 @@ make raspberrypi3_64_scipy_defconfig
 make raspberrypi4_64_scipy_defconfig
 ```
 
-### Sklearn: machine learning toolkit
+### Sklearn: python machine learning toolkit
 
 Package `python-scikitlearn` requires `scipy` and 
-an extra buildroot patch to be applied prior anything, similarly to the `gr-osmosdr` tweak:
+an extra buildroot patch to be applied prior getting started, similarly to `gr-osmosdr`:
 
 ```bash
 source sourceme.ggm
