@@ -14,13 +14,17 @@ How-to use it
 Download the tested buildroot tarball:
 ```bash
 wget https://buildroot.org/downloads/buildroot-2022.08.1.tar.gz
+tar zxvf buildroot-2022.08.1.tar.gz
 ```
 
 ### Configure, build and install
 
 Adding support for these packages requires sourcing the **sourceme.ggm** file (``source sourceme.ggm``) 
-to add the **BR2_EXTERNAL** variable definition (alternatively, one might want to add <code>export
-BR2_EXTERNAL=/somewhere/oscimp_br2_external</code> to the *.bashrc* initialization file).
+to add the **BR2_EXTERNAL** variable definition (alternatively, one might want to add 
+```
+export BR2_EXTERNAL=/somewhere/oscimp_br2_external
+```
+to the *.bashrc* initialization file).
 
 For compiling ``gr-osmodrr`` with XTRX support for pre-2021.08 Buildroot versions, make sure to apply the 
 patch *prior* to configuring Buildroot: from the root Buildroot directory,
