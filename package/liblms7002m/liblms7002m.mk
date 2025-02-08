@@ -12,7 +12,7 @@ LIBLMS7002M_LICENSE_FILES = LICENSE
 # liblms7002m prevents doing an in-source-tree build
 LIBLMS7002M_SUPPORTS_IN_SOURCE_BUILD = NO
 
-LIBLMS7002M_DEPENDENCIES = host-python3 host-python3-cheetah
+LIBLMS7002M_DEPENDENCIES = host-python3 host-python-cheetah
 
 # For third-party blocks, the liblms7002m libraries are mandatory at
 # compile time.
