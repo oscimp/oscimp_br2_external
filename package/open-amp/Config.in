@@ -1,0 +1,4 @@
+config BR2_PACKAGE_OPENAMP
+	bool "openamp"
+	help
+	  Open-AMP
