@@ -1,10 +1,11 @@
 # OscillatorIMP Buildroot additional packages (BR2_EXTERNAL)
+
 BR2_EXTERNAL framework for OscillatorIMP supported peripherals, most significantly
-software defined radio applications on Raspberry Pi(3,4)
+software defined radio applications on Raspberry Pi(3,4) and Red Pitaya.
 
-This support has been tested with the latest stable release of buildroot (2022.08.1) and git master branch.
+This support has been tested with the latest stable release of buildroot (2024.11.1) and ``git master`` branch.
 
-This BR2_EXTERNAL repository is used as a testbed for embedded software not (yet) released on the official
+This ``BR2_EXTERNAL`` repository is used as a testbed for embedded software not (yet) released on the official
 Buildroot repository. Main software applications include the GNU Radio framework, White Rabbit and most significantly
 for embedded board such as the Compute Module 4 IO, XTRX SDR platform and gnss-sdr.
 
@@ -13,8 +14,8 @@ How-to use it
 
 Download the tested buildroot tarball:
 ```bash
-wget https://buildroot.org/downloads/buildroot-2022.08.1.tar.gz
-tar zxvf buildroot-2022.08.1.tar.gz
+wget https://buildroot.org/downloads/buildroot-2024.11.1.tar.gz
+tar zxvf buildroot-2024.11.1.tar.gz
 ```
 
 ### Configure, build and install
@@ -26,7 +27,7 @@ export BR2_EXTERNAL=/somewhere/oscimp_br2_external
 ```
 to the *.bashrc* initialization file).
 
-For compiling ``gr-osmodrr`` with XTRX support for pre-2021.08 Buildroot versions, make sure to apply the 
+For compiling ``gr-osmosdr`` with XTRX support for pre-2021.08 Buildroot versions, make sure to apply the 
 patch *prior* to configuring Buildroot: from the root Buildroot directory,
 ```bash
 patch -p1 < gr-osmosdr-add_xtrx_support.patch
