@@ -1,4 +1,4 @@
-config BR2_PACKAGE_LIBFEC
-	bool "libfec"
+config BR2_PACKAGE_LDPC
+	bool "ldpc-codes"
 	help
-	  PocketSDR dependency: libfec
+	  PocketSDR dependency: ldpc-codes
