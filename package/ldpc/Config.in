@@ -1,0 +1,4 @@
+config BR2_PACKAGE_LIBFEC
+	bool "libfec"
+	help
+	  PocketSDR dependency: libfec
