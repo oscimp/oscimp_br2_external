@@ -93,7 +93,7 @@ index cafabbe..a81e799 100644
      INSTALL = ../linux
      INCLUDE = -I$(SRC) -I../RTKLIB/src
 -    OPTIONS = -DAVX2 -mavx2 -mfma
-+    OPTIONS # = -DAVX2 -mavx2 -mfma
++    OPTIONS = # -DAVX2 -mavx2 -mfma
      LDLIBS = ./librtk.a ./libfec.a ./libldpc.a -lfftw3f -lpthread -lusb-1.0 -lm \
               -lpthread
  endif
