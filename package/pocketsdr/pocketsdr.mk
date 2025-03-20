@@ -11,13 +11,13 @@ POCKETSDR_SITE = $(call github,meriac,PocketSDR,$(POCKETSDR_VERSION))
 POCKETSDR_INSTALL_STAGING = YES
 POCKETSDR_LICENSE = BSD-2
 POCKETSDR_LICENSE_FILES = LICENSE.txt
-POCKETSDR_DEPENDENCIES = libfec ldpc libusb fftw-double
+POCKETSDR_DEPENDENCIES = libfec ldpc libusb fftw-single
 
 define POCKETSDR_BUILD_CMDS
-    # cd $(@D)/lib
-    # sh $(@D)/lib/clone_lib.sh
     $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib/build -f librtk.mk
+    $(INSTALL) -d $(STAGING_DIR)/usr/lib $(@D)/lib/librtk.so $(@D)/lib/librtk.a
     $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib/build -f libsdr.mk
+    $(INSTALL) -d $(STAGING_DIR)/usr/lib $(@D)/lib/libsdr.so $(@D)/lib/libsdr.a
     $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/app
 endef
 

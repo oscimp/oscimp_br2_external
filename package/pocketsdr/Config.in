@@ -3,6 +3,6 @@ config BR2_PACKAGE_POCKETSDR
         select BR2_PACKAGE_LIBFEC
         select BR2_PACKAGE_LDPC
         select BR2_PACKAGE_LIBUSB
-        select BR2_PACKAGE_FFTW
+        select BR2_PACKAGE_FFTW_SINGLE
 	help
 	  PocketSDR libraries, configuration and acquisition

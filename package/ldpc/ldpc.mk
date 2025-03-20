@@ -16,7 +16,7 @@ define LDPC_BUILD_CMDS
 endef
 
 define LDPC_INSTALL_STAGING_CMDS
-    $(INSTALL) -D -m 0755 $(@D)/libldpc.so $(@D)/libldpc.a $(TARGET_DIR)/usr/bin
+    $(INSTALL) -D -m 0755 $(@D)/libldpc.so $(@D)/libldpc.a $(STAGING_DIR)/usr/lib
 endef
 
 $(eval $(generic-package))
