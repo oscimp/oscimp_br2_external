@@ -1,0 +1,99 @@
+diff --git a/app/pocket_acq/makefile b/app/pocket_acq/makefile
+index ca21c75..24fc625 100644
+--- a/app/pocket_acq/makefile
++++ b/app/pocket_acq/makefile
+@@ -19,7 +19,7 @@ else ifeq ($(shell uname -sm),Darwin arm64)
+              -lfftw3f -lpthread -lm
+     OPTIONS = -I/opt/homebrew/include
+ else
+-    CC = g++
++    CC ?= g++
+     INCLUDE = -I$(SRC) -I$(LIB)/RTKLIB/src
+     LDLIBS = $(LIB)/linux/libsdr.a $(LIB)/linux/librtk.a -lfftw3f -lpthread -lm
+     OPTIONS =
+diff --git a/app/pocket_conf/makefile b/app/pocket_conf/makefile
+index 1251764..3f17101 100644
+--- a/app/pocket_conf/makefile
++++ b/app/pocket_conf/makefile
+@@ -2,7 +2,7 @@
+ #  makefile for pocket_conf
+ #
+ 
+-CC = g++
++CC ?= g++
+ 
+ SRC = ../../src
+ LIB = ../../lib
+diff --git a/app/pocket_dump/makefile b/app/pocket_dump/makefile
+index 82c6c8e..9862904 100644
+--- a/app/pocket_dump/makefile
++++ b/app/pocket_dump/makefile
+@@ -17,7 +17,7 @@ else ifeq ($(shell uname -sm),Darwin arm64)
+     OPTIONS = -Wno-deprecated
+     LDLIBS = -L/opt/homebrew/lib $(LIB)/macos/libsdr.a -lusb-1.0 -lpthread
+ else
+-    CC = g++
++    CC ?= g++
+     INCLUDE = -I$(SRC) -I$(LIB)/RTKLIB/src
+     OPTIONS =
+     LDLIBS = $(LIB)/linux/libsdr.a -lusb-1.0 -lpthread
+diff --git a/app/pocket_scan/makefile b/app/pocket_scan/makefile
+index 5c3ca70..b1d3e72 100644
+--- a/app/pocket_scan/makefile
++++ b/app/pocket_scan/makefile
+@@ -2,7 +2,7 @@
+ #  makefile for pocket_scan
+ #
+ 
+-CC = g++
++CC ?= g++
+ 
+ SRC = ../../src
+ LIB = ../../lib
+diff --git a/app/pocket_snap/makefile b/app/pocket_snap/makefile
+index b43ad5b..5394c41 100644
+--- a/app/pocket_snap/makefile
++++ b/app/pocket_snap/makefile
+@@ -18,10 +18,10 @@ else ifeq ($(shell uname -sm),Darwin arm64)
+              -lfftw3f -lpthread -lm
+     OPTIONS = -I/opt/homebrew/include
+ else
+-    CC = g++
++    CC ?= g++
+     INCLUDE = -I$(SRC) -I$(LIB)/RTKLIB/src
+     LDLIBS = $(LIB)/linux/libsdr.a $(LIB)/linux/librtk.a -lfftw3f -lpthread -lm
+-    OPTIONS = -DAVX2 -mavx2 -mfma
++    OPTIONS = # -DAVX2 -mavx2 -mfma
+ endif
+ ifeq ($(shell uname -m),aarch64)
+     OPTIONS = -DNEON
+diff --git a/app/pocket_trk/makefile b/app/pocket_trk/makefile
+index 0b33529..108ed51 100644
+--- a/app/pocket_trk/makefile
++++ b/app/pocket_trk/makefile
+@@ -2,7 +2,7 @@
+ #  makefile for pocket_trk, fftw_wisdom
+ #
+ 
+-CC = g++
++CC ?= g++
+ 
+ SRC = ../../src
+ LIB = ../../lib
+diff --git a/lib/build/libsdr.mk b/lib/build/libsdr.mk
+index cafabbe..a81e799 100644
+--- a/lib/build/libsdr.mk
++++ b/lib/build/libsdr.mk
+@@ -24,10 +24,10 @@ else ifeq ($(shell uname -sm),Darwin arm64)
+     LDLIBS = -L/opt/homebrew/lib ./librtk.a ./libfec.a ./libldpc.a -lfftw3f \
+              -lusb-1.0 -lpthread
+ else
+-    CC = g++
++    CC ?= g++
+     INSTALL = ../linux
+     INCLUDE = -I$(SRC) -I../RTKLIB/src
+-    OPTIONS = -DAVX2 -mavx2 -mfma
++    OPTIONS # = -DAVX2 -mavx2 -mfma
+     LDLIBS = ./librtk.a ./libfec.a ./libldpc.a -lfftw3f -lpthread -lusb-1.0 -lm \
+              -lpthread
+ endif
