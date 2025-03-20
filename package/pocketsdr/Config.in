@@ -1,6 +1,6 @@
 config BR2_PACKAGE_POCKETSDR
 	bool "PocketSDR"
-#        select BR2_PACKAGE_LIBFEC
-#        select BR2_PACKAGE_LDPC
+        select BR2_PACKAGE_LIBFEC
+        select BR2_PACKAGE_LDPC
 	help
 	  PocketSDR libraries, configuration and acquisition
