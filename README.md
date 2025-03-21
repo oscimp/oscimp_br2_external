@@ -23,10 +23,14 @@ tar zxvf buildroot-2024.11.1.tar.gz
 
 Adding support for these packages requires sourcing the **sourceme.ggm** file (``source sourceme.ggm``) 
 to add the **BR2_EXTERNAL** variable definition (alternatively, one might want to add 
-```
+```bash
 export BR2_EXTERNAL=/somewhere/oscimp_br2_external
 ```
-to the *.bashrc* initialization file).
+to the *.bashrc* initialization file). Notice that multiple BR2_EXTERNAL repositories can be combined,
+e.g. with <a href="https://github.com/trabucayre/redpitaya"> with
+```bash
+export BR2_EXTERNAL=/somewhere/oscimp_br2_external:/somewhere/redpitaya
+```
 
 For compiling ``gr-osmosdr`` with XTRX support for pre-2021.08 Buildroot versions, make sure to apply the 
 patch *prior* to configuring Buildroot: from the root Buildroot directory,
