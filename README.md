@@ -27,7 +27,7 @@ to add the **BR2_EXTERNAL** variable definition (alternatively, one might want t
 export BR2_EXTERNAL=/somewhere/oscimp_br2_external
 ```
 to the *.bashrc* initialization file). Notice that multiple BR2_EXTERNAL repositories can be combined,
-e.g. with <a href="https://github.com/trabucayre/redpitaya"> with
+e.g. with <a href="https://github.com/trabucayre/redpitaya">the Red Pitaya configuration</a> with
 ```bash
 export BR2_EXTERNAL=/somewhere/oscimp_br2_external:/somewhere/redpitaya
 ```
