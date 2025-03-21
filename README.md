@@ -6,7 +6,7 @@ software defined radio applications on Raspberry Pi(3,4) and Red Pitaya.
 This support has been tested with the latest stable release of buildroot (2024.11.1) and ``git master`` branch.
 
 This ``BR2_EXTERNAL`` repository is used as a testbed for embedded software not (yet) released on the official
-Buildroot repository. Main software applications include <a href="https://ohwr.org/projects/white-rabbit">White Rabbit"</a>, 
+Buildroot repository. Main software applications include <a href="https://ohwr.org/projects/white-rabbit">White Rabbit</a>, 
 <a href="https://github.com/gnss-sdr/gnss-sdr">gnss-sdr</a> and <a href="https://github.com/tomojitakasu/pocketsdr">PocketSDR</a> 
 and most significantly for embedded board such as the Compute Module 4 IO, XTRX SDR or Raspberry Pi 4/5 platforms.
 
