@@ -1,4 +1,5 @@
 config BR2_PACKAGE_OPENAMP
 	bool "openamp"
+        select BR2_PACKAGE_GNUTLS
 	help
 	  OpenAMP
