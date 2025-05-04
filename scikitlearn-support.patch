@@ -1,29 +1,31 @@
-From 7ea6a82abd2ca2204726f6ba1c2b93f52ef24e2f Mon Sep 17 00:00:00 2001
+From 9aeef473bdfc5d6666e6c9df9622502789b730bf Mon Sep 17 00:00:00 2001
 From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
-Date: Sun, 20 Feb 2022 15:41:55 +0100
-Subject: [PATCH] unlock scikitlearn dependencies
+Date: Mon, 31 Oct 2022 18:46:58 +0100
+Subject: [PATCH] package/python-scikitlearn: needs host-python-scipy,
+ host-lapack and host-python-pybind
 
 Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 ---
  package/lapack/lapack.mk               | 1 +
  package/openblas/openblas.mk           | 9 +++++++++
  package/python-pybind/python-pybind.mk | 1 +
- 3 files changed, 11 insertions(+)
+ package/python-scipy/python-scipy.mk   | 9 +++++++++
+ 4 files changed, 20 insertions(+)
 
 diff --git a/package/lapack/lapack.mk b/package/lapack/lapack.mk
-index 609075842d..cdae475097 100644
+index 3db2797..dc7ce1c 100644
 --- a/package/lapack/lapack.mk
 +++ b/package/lapack/lapack.mk
-@@ -23,3 +23,4 @@ LAPACK_CONF_OPTS += -DBUILD_COMPLEX=OFF -DBUILD_COMPLEX16=OFF
+@@ -28,3 +28,4 @@ LAPACK_CONF_OPTS += \
  endif
  
  $(eval $(cmake-package))
 +$(eval $(host-cmake-package))
 diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
-index 4d506fa618..824b6924c8 100644
+index 085d32a..a3480a1 100644
 --- a/package/openblas/openblas.mk
 +++ b/package/openblas/openblas.mk
-@@ -65,6 +65,10 @@ define OPENBLAS_BUILD_CMDS
+@@ -66,6 +66,10 @@ define OPENBLAS_BUILD_CMDS
  	$(TARGET_MAKE_ENV) $(MAKE) $(OPENBLAS_MAKE_OPTS) \
  		-C $(@D)
  endef
@@ -34,7 +36,7 @@ index 4d506fa618..824b6924c8 100644
  
  define OPENBLAS_INSTALL_STAGING_CMDS
  	$(TARGET_MAKE_ENV) $(MAKE) $(OPENBLAS_MAKE_OPTS) \
-@@ -75,5 +79,10 @@ define OPENBLAS_INSTALL_TARGET_CMDS
+@@ -76,5 +80,10 @@ define OPENBLAS_INSTALL_TARGET_CMDS
  	$(TARGET_MAKE_ENV) $(MAKE) $(OPENBLAS_MAKE_OPTS) \
  		-C $(@D) install PREFIX=$(TARGET_DIR)/usr
  endef
@@ -46,7 +48,7 @@ index 4d506fa618..824b6924c8 100644
  $(eval $(generic-package))
 +$(eval $(host-generic-package))
 diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
-index 7448d246b2..6389f3c6b2 100644
+index c5bee3d..24b3fc3 100644
 --- a/package/python-pybind/python-pybind.mk
 +++ b/package/python-pybind/python-pybind.mk
 @@ -26,3 +26,4 @@ endef
@@ -54,6 +56,30 @@ index 7448d246b2..6389f3c6b2 100644
  
  $(eval $(cmake-package))
 +$(eval $(host-cmake-package))
+diff --git a/package/python-scipy/python-scipy.mk b/package/python-scipy/python-scipy.mk
+index a8c23c6..5691ed4 100644
+--- a/package/python-scipy/python-scipy.mk
++++ b/package/python-scipy/python-scipy.mk
+@@ -31,6 +31,14 @@ PYTHON_SCIPY_DEPENDENCIES += \
+ 	lapack \
+ 	python-numpy \
+ 	python-pybind
++
++HOST_PYTHON_SCIPY_DEPENDENCIES += \
++	host-python-numpy \
++	host-python-pythran \
++	host-python-pybind \
++	host-lapack \
++	zlib
++
+ PYTHON_SCIPY_INSTALL_STAGING = YES
+ 
+ PYTHON_SCIPY_SETUP_TYPE = setuptools
+@@ -56,3 +64,4 @@ define PYTHON_SCIPY_CONFIGURE_CMDS
+ endef
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
-2.20.1
+1.8.3.1
 
